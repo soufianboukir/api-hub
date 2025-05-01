@@ -20,7 +20,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            }
         }),
         Credentials({
             name: "credentials",
@@ -33,7 +40,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 await dbConnection();
                 const {email, password} = credentials as Credentials;
                 const user:UserI | null = await User.findOne({email:email});
-                console.log(user)
                 if(!user) {
                     throw new Error("Email or password incorrect")
                 }
@@ -59,6 +65,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         error:"/signIn",
     },
     callbacks:{
+        async signIn({ user, account, profile }) {
+            if (account?.provider === "google") {
+                await dbConnection();
+                
+                const existingUser = await User.findOne({ email: profile?.email });
+                
+                if (existingUser) {
+                    throw new Error("User with this email already exists")
+                } else {
+                    const newUser = await User.create({
+                        name: profile?.name,
+                        email: profile?.email,
+                    });
+                    user.id = newUser._id.toString();
+                }
+            }
+            return true;
+        },
         async jwt({token,user}){
             if (user) {
                 token.id = user.id;
