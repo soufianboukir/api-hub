@@ -5,7 +5,8 @@ const mongoUrl = process.env.MONGO_URL as string;
 export const dbConnection = async () =>{
     try{
         await mongoose.connect(mongoUrl);
-    }catch {
+        console.log('connected to db!')
+    }catch{
         console.log('Failed to connect to db');
     }
 }

@@ -1,67 +1,76 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
-import { User as UserInterface } from "@/types/index"
 import { dbConnection } from "./lib/db/dbConnection"
-import User from "./models/user.model"
+import User, { UserI } from "./models/user.model"
 import bcrypt from "bcryptjs"
+ 
+type Credentials = {
+    email: string,
+    password: string,
+}
 
+type ReturnedUser = {
+    id: string,
+    name: string,
+    email: string,
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Google({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientId: process.env.GOOGLE_CLIENT_ID as string, 
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
         }),
-
         Credentials({
-            name:"credentials",
-            credentials: {
-                email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" }
+            name: "credentials",
+            credentials:{
+                email : {label:'email', type:'email'},
+                password: {label:'password', type:'password'}
             },
-            async authorize(credentials): Promise<UserInterface | null>{
-                try{  
-                    await dbConnection();
-                    const user = await User.findOne({email:credentials?.email});
-                    if(!user){
-                        throw new Error("Email or password incorrect");
-                    }
 
-                    const correctedPass:boolean = await bcrypt.compare(credentials?.password as string
-                            ,user.password);
-                    if(!correctedPass){
-                        throw new Error("Email or password incorrect");
-                    }
-
-                    return user;
-                }catch{
-                    return null
+            async authorize(credentials): Promise<ReturnedUser>{
+                await dbConnection();
+                const {email, password} = credentials as Credentials;
+                const user:UserI | null = await User.findOne({email:email});
+                console.log(user)
+                if(!user) {
+                    throw new Error("Email or password incorrect")
                 }
-            }
+                
+                const passwordsMatched:boolean = await bcrypt.compare(password,user.password);
+                if(!passwordsMatched){
+                    throw new Error("Email or password incorrect")
+                }
+
+                return {
+                    id: user._id as string,
+                    name: user.name,
+                    email: user.email,
+                };
+            },
         })
     ],
-    pages: {
-        signIn: "/signin",
-        error: "/signin",
+    session: {
+        strategy: 'jwt'
     },
-    session:{
-        strategy:"jwt"
+    pages:{
+        signIn:"/signIn",
+        error:"/signIn",
     },
     callbacks:{
         async jwt({token,user}){
-            if(user){
-                token.id = user.id
+            if (user) {
+                token.id = user.id;
             }
-            return token
+            return token;
         },
-        async session({ session, token}){
-            if(session.user){
-                session.user.id = token.id as string
+        async session({session,token}){
+            if (token) {
+                session.id = token.id
             }
-            return session;
+            return Promise.resolve(session);
         }
     },
-    secret: process.env.NEXTAUTH_SECRET,
-    debug: process.env.NODE_ENV === "development",
+    secret : process.env.NEXTAUTH_SECRET
 })

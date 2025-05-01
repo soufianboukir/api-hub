@@ -1,25 +1,28 @@
-import { UserI } from "@/types";
-import mongoose, { models, Schema } from "mongoose";
+import mongoose, { Document, models, Schema } from "mongoose";
 
-
+export interface UserI extends Document{
+    name: string,
+    email: string,
+    username: string,
+    password: string,
+    bio: string,
+    profile_picture: string,
+    bg_picture: string,
+}
 
 
 const userSchema = new Schema<UserI>({
-    name : {type: String, required: true},
-    email : {
-        type: String,
-        required : [true, "Email is required"],
-        unique : true
-    },
-    password : {
-        type: String,
-        required : true,
-    },
-    profile_picture : {type: String},
-    bio : {type: String}
-},{
-    timestamps:true
+    name : {type : String,required: true},
+    email : {type : String,required: true},
+    username : {type : String,required: true},
+    password: {type : String, required: true},
+    bio : {type : String},
+    profile_picture : {type : String},
+    bg_picture : {type : String},
+},
+{
+    timestamps: true
 });
 
-const User = models.User ||  mongoose.model<UserI>("User",userSchema)
+const User = models.User || mongoose.model<UserI>('User',userSchema);
 export default User;
