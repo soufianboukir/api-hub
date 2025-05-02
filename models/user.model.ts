@@ -14,8 +14,8 @@ export interface UserI extends Document{
 const userSchema = new Schema<UserI>({
     name : {type : String,required: true},
     email : {type : String,required: true},
-    username : {type : String,required: true},
-    password: {type : String, required: true},
+    username : {type : String},
+    password: {type : String},
     bio : {type : String},
     profile_picture : {type : String},
     bg_picture : {type : String},

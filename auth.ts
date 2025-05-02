@@ -24,7 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             authorization: {
                 params: {
                     prompt: "consent",
-                    access_type: "offline",
                     response_type: "code"
                 }
             }
@@ -68,15 +67,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async signIn({ user, account, profile }) {
             if (account?.provider === "google") {
                 await dbConnection();
-                
                 const existingUser = await User.findOne({ email: profile?.email });
-                
+
                 if (existingUser) {
-                    throw new Error("User with this email already exists")
+                    user.id = existingUser._id.toString();
                 } else {
                     const newUser = await User.create({
                         name: profile?.name,
                         email: profile?.email,
+                        profile_picture: profile?.image
                     });
                     user.id = newUser._id.toString();
                 }

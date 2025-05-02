@@ -1,12 +1,12 @@
 'use client'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import Image from 'next/image'
 import appLogo from '../../../public/apihub-Logo.png'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 import googleLogo from '../../../public/google-Logo.webp'
 import githubLogo from '../../../public/github-Logo.png'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 
 type SignInErrors = {
@@ -16,49 +16,60 @@ type SignInErrors = {
 }
 
 function Page() {
-    const [email,setEmail] = useState<string>('');
-    const [password,setPassword] = useState<string>('');
-    const [isLoading,setIsLoading] = useState<boolean>(false);
-    const [errors,setErrors] = useState<SignInErrors>({})
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errors, setErrors] = useState<SignInErrors>({});
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    
     const router = useRouter();
-
+    const searchParams = useSearchParams();
+    
+    useEffect(() => {
+        const errorType = searchParams.get('error');
+        if (errorType === 'EmailExists') {
+            setErrors({ form: 'An account with this email already exists.' });
+        }
+        if(errorType === 'Configuration') {
+            setErrors({ form: 'Network error. try again!' });
+        }
+    }, [searchParams]);
+    
     const validateForm = () => {
         const newErrors: SignInErrors = {};
         if (!email) {
-            newErrors.email = 'Email is required';
+        newErrors.email = 'Email is required';
         }
         if (!password) {
-            newErrors.password = 'Password is required';
+        newErrors.password = 'Password is required';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
+    
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
-            setIsLoading(true);
-            try {
-                const result = await signIn('credentials', {
-                    email,
-                    password,
-                    redirect: false,
-                    callbackUrl:"/dashboard"
-                });
-                
-                if (result?.error) {
-                    setErrors({ 
-                        form: 'Invalid email or password'
-                    });
-                } else {
-                    router.push(result?.url || '/dashboard');
-                }
-            } catch {
-                setErrors({ form: 'An unexpected error occurred' });
-            } finally {
-                setIsLoading(false);
+        setIsLoading(true);
+        try {
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+                callbackUrl: "/dashboard"
+            });
+            if (result?.error) {
+            setErrors({
+                form: 'Invalid email or password'
+            });
+            } else {
+                router.push(result?.url || '/dashboard');
             }
+        } catch {
+            setErrors({ form: 'An unexpected error occurred' });
+        } finally {
+            setIsLoading(false);
+        }
         }
     };
     return (
@@ -203,7 +214,7 @@ function Page() {
                             <div className="grid grid-cols-2 gap-3">
                                 <button
                                 type="button"
-                                onClick={() => signIn('google')}
+                                onClick={() => signIn('google',{ callbackUrl: '/dashboard' })}
                                 className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                                 >
                                 <Image
