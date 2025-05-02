@@ -1,4 +1,3 @@
-// middleware.js (in your project root)
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from './auth';
 
@@ -14,9 +13,7 @@ export async function middleware(request:NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/dashboard/:path*',
-    '/profile/:path*',
-    '/settings/:path*',
-  ],
+    matcher: [
+        '/dashboard',
+    ],
 };
