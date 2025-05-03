@@ -3,12 +3,9 @@ import { auth } from './auth';
 
 export async function middleware(request:NextRequest) {
   const session = await auth();
-  
   if (!session && !request.nextUrl.pathname.startsWith('/auth')) {
-    const returnUrl = encodeURIComponent(request.nextUrl.pathname);
-    return NextResponse.redirect(new URL(`/signIn?returnUrl=${returnUrl}`, request.url));
+    return NextResponse.redirect(new URL('/auth/signIn', request.url));
   }
-  
   return NextResponse.next();
 }
 

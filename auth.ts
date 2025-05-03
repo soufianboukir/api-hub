@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
-import { dbConnection } from "./lib/db/dbConnection"
 import User, { UserI } from "./models/user.model"
 import bcrypt from "bcryptjs"
+import { dbConnection } from "./lib/dbConnection"
  
 type Credentials = {
     email: string,
@@ -15,7 +15,6 @@ type ReturnedUser = {
     name: string,
     email: string,
 }
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Google({
@@ -60,8 +59,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         strategy: 'jwt'
     },
     pages:{
-        signIn:"/signIn",
-        error:"/signIn",
+        signIn:"/auth/signIn",
+        error:"/auth/signIn",
     },
     callbacks:{
         async signIn({ user, account, profile }) {
@@ -90,7 +89,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async session({session,token}){
             if (token) {
-                session.id = token.id
+                session.id = token.id as string
             }
             return Promise.resolve(session);
         }
