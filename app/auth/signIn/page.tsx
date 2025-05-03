@@ -57,14 +57,14 @@ function Page() {
                 email,
                 password,
                 redirect: false,
-                callbackUrl: "/dashboard"
+                callbackUrl: "/hub"
             });
             if (result?.error) {
             setErrors({
                 form: 'Invalid email or password'
             });
             } else {
-                router.push(result?.url || '/dashboard');
+                router.push(result?.url || '/hub');
             }
         } catch {
             setErrors({ form: 'An unexpected error occurred' });

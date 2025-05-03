@@ -35,7 +35,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }catch {
         return NextResponse.json(
             {
-            error:"Failed to create post",
+            error:"Failed to sign up",
             }, {
                 status : 500,
             }

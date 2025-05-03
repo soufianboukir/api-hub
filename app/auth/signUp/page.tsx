@@ -86,14 +86,14 @@ function Page() {
                     email,
                     password,
                     redirect: false,
-                    callbackUrl: "/dashboard"
+                    callbackUrl: "/hub"
                 });
 
 
                 if (result?.error) {
                     setErrors({ form: 'Account created but login failed. Please sign in.' });
                 } else {
-                    router.push(result?.url || '/dashboard');
+                    router.push(result?.url || '/hub');
                 }
             }catch(error: unknown){
                 if(error && typeof error === 'object' && 'message' in error){
