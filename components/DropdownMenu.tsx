@@ -1,3 +1,5 @@
+'use client'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 import tux from '@/public/tux.jpg'
+import { signOut } from "@/auth"
 
 export function DropdownMenuDemo() {
   return (
@@ -51,7 +54,7 @@ export function DropdownMenuDemo() {
         <DropdownMenuItem>GitHub</DropdownMenuItem>
         <DropdownMenuItem disabled>API</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut()}>
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -1,4 +1,3 @@
-'use client'
 
 import appLogo from '@/public/apihub-Logo.png'
 import Image from 'next/image'
@@ -6,8 +5,11 @@ import Link from 'next/link'
 import { SearchInput } from './SearchInput'
 import { Bell, Heart, Mail } from 'lucide-react'
 import { DropdownMenuDemo } from './DropdownMenu'
+import { auth } from '@/auth'
 
-export const Header = () => {
+export const Header = async () => {
+    const session = await auth();
+    
     return (
         <header className='flex justify-between items-center px-2 lg:px-10 py-1 h-[8vh] border-b border-b-gray-300 fixed z-20 bg-white w-[100%]'>
             <div>
@@ -28,6 +30,9 @@ export const Header = () => {
             <div className='flex gap-1 items-center'>
                 <div className='hover:bg-gray-100 duration-200 p-2 rounded-md cursor-pointer'>
                     <Link href={'/dashboard'}>
+                    {
+                        session?.user?.name
+                    }
                         <span className='font-semibold text-sm'>Api marketplace</span>
                     </Link> 
                 </div>
