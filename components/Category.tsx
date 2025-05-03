@@ -9,7 +9,7 @@ export const Category = ({category}:{category:CategoryI}) => {
             <h1 className='text-xl font-semibold mt-2'>{category.name}</h1>
             <p className='text-lg text-gray-600'>{
                 category.description.length > 50 ? 
-                    category.description.substring(0,50) + "..."
+                    category?.description?.substring(0,50) + "..."
                   : category.description
             }</p>
             <br />

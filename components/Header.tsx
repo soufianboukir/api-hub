@@ -1,10 +1,11 @@
 'use client'
+
 import appLogo from '@/public/apihub-Logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { SearchInput } from './SearchInput'
 import { Bell, Heart, Mail } from 'lucide-react'
-import tux from '@/public/tux.jpg'
+import { DropdownMenuDemo } from './DropdownMenu'
 
 export const Header = () => {
     return (
@@ -43,14 +44,7 @@ export const Header = () => {
                 </div>
 
                 <div className='p-2'>
-                    <Image
-                        src={tux} 
-                        width={30}
-                        height={30}
-                        alt="Application logo"
-                        priority
-                        className='cursor-pointer object-cover rounded-full aspect-square' 
-                    />
+                    <DropdownMenuDemo />
                 </div>
             </div>
         </header>
