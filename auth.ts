@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google"
 import User, { UserI } from "./models/user.model"
 import bcrypt from "bcryptjs"
 import { dbConnection } from "./lib/dbConnection"
+import { generateRandomColor, generateUniqueUsername } from "./constants"
  
 type Credentials = {
     email: string,
@@ -13,7 +14,9 @@ type Credentials = {
 type ReturnedUser = {
     id: string,
     name: string,
+    defaultColor: string,
     email: string,
+    username: string
 }
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -49,8 +52,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 return {
                     id: user._id as string,
+                    defaultColor: user.defaultColor,
                     name: user.name,
                     email: user.email,
+                    username: user.username
                 };
             },
         })
@@ -74,7 +79,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     const newUser = await User.create({
                         name: profile?.name,
                         email: profile?.email,
-                        profile_picture: profile?.image
+                        defaultColor: generateRandomColor(),
+                        profile_picture: profile?.image,
+                        username : generateUniqueUsername(profile?.name),
                     });
                     user.id = newUser._id.toString();
                 }
@@ -83,15 +90,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async jwt({token,user}){
             if (user) {
-                token.id = user.id;
+                token.user = user;
             }
             return token;
         },
         async session({session,token}){
-            if (token) {
-                session.id = token.id as string
+            if (token?.user) {
+                session.user = token.user as typeof session.user; 
             }
-            return Promise.resolve(session);
+            return session;
         }
     },
     secret : process.env.NEXTAUTH_SECRET

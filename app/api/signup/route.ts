@@ -1,3 +1,4 @@
+import { generateRandomColor, generateUniqueUsername } from "@/constants";
 import { dbConnection } from "@/lib/dbConnection";
 import User, { UserI } from "@/models/user.model";
 import bcrypt from "bcryptjs";
@@ -18,10 +19,13 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
             })
         }
         const hashedPassword:string = await bcrypt.hash(password,10);
+        const randomColor = generateRandomColor();
 
         const newUser = new User({
             name,
             email,
+            defaultColor : randomColor,
+            username : generateUniqueUsername(name),
             password:hashedPassword
         });
 

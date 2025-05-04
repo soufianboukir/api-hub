@@ -10,7 +10,7 @@ function layout({children}:Readonly<{children: React.ReactNode}>) {
                 <div className='w-[20%]'>
                     <Sidebar />
                 </div>
-                <div className='mt-[12vh] lg:ml-[15%]'>
+                <div className='mt-[12vh]'>
                     {children}
                 </div>
             </div>

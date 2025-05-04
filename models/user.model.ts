@@ -4,6 +4,7 @@ export interface UserI extends Document{
     name: string,
     email: string,
     username: string,
+    defaultColor: string,
     password: string,
     bio: string,
     profile_picture: string,
@@ -14,6 +15,7 @@ export interface UserI extends Document{
 const userSchema = new Schema<UserI>({
     name : {type : String,required: true},
     email : {type : String,required: true},
+    defaultColor : {type: String},
     username : {type : String},
     password: {type : String},
     bio : {type : String},
