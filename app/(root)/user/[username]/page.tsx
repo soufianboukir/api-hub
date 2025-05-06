@@ -18,12 +18,11 @@ export async function generateMetadata({params}:UserProfilePageProps):Promise<Me
 
 async function page({params}:UserProfilePageProps) {
     const { username } = params;
-    const response = await fetchUserData(username);
-    console.log(response);
+    const data = await fetchUserData(username);
     
     // const userAPIs = fetchUserAPIs();
 
-    if(response.status !== 200){
+    if(!data.user){
         notFound();
     }
 

@@ -13,6 +13,7 @@ import Image from "next/image"
 import tux from '@/public/tux.jpg'
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
+import Link from "next/link"
 
 export function DropdownMenuDemo({session}:{session:Session | null}) {
   
@@ -30,7 +31,7 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
               className='cursor-pointer object-cover rounded-full aspect-square' 
             /> 
           ): (
-            <div className={`w-8 h-8 text-white flex justify-center items-center rounded-full ${session?.user?.defaultColor}`}>
+            <div className={`w-8 h-8 text-white flex justify-center items-center rounded-full ${session?.user?.defaultColor} cursor-pointer`}>
               {session?.user?.name ? session.user.name[0] : 'U'}
             </div>
           )
@@ -51,7 +52,9 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            User profile
+            <Link href={`/user/${session?.user.username}`}>
+              User Profile
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             Favorite APIs

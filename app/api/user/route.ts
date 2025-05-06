@@ -2,7 +2,7 @@ import { dbConnection } from "@/lib/dbConnection";
 import User, { UserI } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request:NextRequest):Promise<NextResponse> =>{
+export const GET = async (request:NextRequest): Promise<NextResponse> =>{
     try{
         const url = new URL(request.url);
         const username: string = url.searchParams.get('username') ?? '';
