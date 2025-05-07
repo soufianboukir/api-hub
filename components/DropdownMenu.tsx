@@ -51,7 +51,7 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link href={`/user/${session?.user.username}`}>
               User Profile
             </Link>
