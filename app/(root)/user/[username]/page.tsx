@@ -1,7 +1,7 @@
+import { UploadProfileImages } from '@/components/client/UploadProfileImages';
 import { fetchUserData } from '@/services/users';
 import { SquarePen } from 'lucide-react';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react'
@@ -33,39 +33,8 @@ async function page({params}:UserProfilePageProps) {
 
     return (
         <div className="p-4 w-[100%]">
-            <div className="w-[100%] relative">
-                {
-                    data.user.bg_picture ? (
-                        <Image
-                            src={data.user.bg_picture ? data.user.bg_picture : null}
-                            alt="user background"
-                            className={`w-[100%] h-[200px] object-cover border border-gray-200 rounded-md shadow-lg`}
-                        />
-                    ) : (
-                        <div className={`w-[100%] h-[200px] object-cover border border-gray-200 rounded-md shadow-lg ${data.user.defaultColor}`}>
-                            
-                        </div>
-                    )
-                }
+            <UploadProfileImages user={data.user}/>
 
-                <div className='absolute left-20 top-28'>
-                    {
-                        data.user.profile_picture ? (
-                            <Image
-                                src={data.user.profile_picture ? data.user.profile_picture : null}
-                                alt="user profile picture"
-                                className={`w-[100%] h-[200px] object-cover border border-gray-200 rounded-md shadow-lg`}
-                            />
-                        ) : (
-                            <div className={`w-40 flex justify-center items-center text-white font-semibold text-5xl rounded-full h-40 object-cover border-2 border-gray-200 shadow-lg ${data.user.defaultColor}`}>
-                                {
-                                    data.user.username[0].toUpperCase()
-                                }
-                            </div>
-                        )
-                    }
-                </div>
-            </div>
             <br />
             <br />
             <br />
@@ -77,6 +46,11 @@ async function page({params}:UserProfilePageProps) {
                         <SquarePen className='text-gray-700'/>
                     </Link>
                 </div>
+            </div>
+
+            <div className='mt-5'>
+                <h1 className='text-xl font-semibold'>Published APIs</h1>
+                <hr className='w-[11%] border border-blue-400'/>
             </div>
         </div>
     )

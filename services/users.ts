@@ -11,3 +11,8 @@ export const fetchUserData = async (username: string) => {
         throw error; 
     }
 }
+
+export const updateUserProfile = async (formData: FormData) =>{
+    const response = await api.post(`/api/user/upload`,formData)
+    return response;
+}
