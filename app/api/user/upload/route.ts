@@ -32,7 +32,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
                 status : 400,
             })
         }else{
-            const oldImage:string = type === 'profile' ? user.profile_picture : user.bg_picture;
+            const oldImage:string | undefined = type === 'profile' ? user.profile_picture : user.bg_picture;
             if (oldImage && oldImage.startsWith('/uploads')) {
                 const filePath = path.join(process.cwd(), 'public', oldImage);
                 if (fs.existsSync(filePath)) {
