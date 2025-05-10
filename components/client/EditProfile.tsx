@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
+import { toast } from "sonner"
+import { updateUserProfileInfo } from "@/services/users"
 
 
 export type ProfileInfo = {
@@ -33,6 +35,24 @@ export function EditProfile({profileInfo, setProfileInfo}:
 
     const handleChange = (e:ChangeEvent<HTMLInputElement  | HTMLTextAreaElement>) =>{
         setForm({ ...form, [e.target.id]: e.target.value });
+    }
+
+    const handleSubmit = async ()=>{
+        const response = updateUserProfileInfo(form);
+        console.log(response);
+        // implement the updating in the client side!!!!!!!
+        // implement the updating in the client side!!!!!!!
+        // implement the updating in the client side!!!!!!!
+        // implement the updating in the client side!!!!!!!
+        // implement the updating in the client side!!!!!!!
+
+        toast.promise(response, {
+            loading: 'Uploading...',
+            success: async (res) => {
+                return res.data.message;
+            },
+            error: (err) => err?.response?.data?.error || 'Upload failed',
+        });
     }
   return (
     <Dialog>
@@ -93,7 +113,7 @@ export function EditProfile({profileInfo, setProfileInfo}:
                 </div>
             </div>
             <DialogFooter>
-                <Button className="bg-blue-600 cursor-pointer hover:bg-blue-500" type="submit">
+                <Button className="bg-blue-600 cursor-pointer hover:bg-blue-500" type="submit" onClick={handleSubmit}>
                     Save changes
                 </Button>
             </DialogFooter>

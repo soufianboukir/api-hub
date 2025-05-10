@@ -35,6 +35,7 @@ export const updateUserImage = async (username: string,path: string,type: 'profi
 
 export const updateProfileInfo = async ({profileInfo}:{profileInfo: ProfileInfo}, id: string) =>{
     try{
+        await dbConnection();
         const user: UserI | null = await User.findById(id);
         if(!user){
             return {
@@ -57,7 +58,7 @@ export const updateProfileInfo = async ({profileInfo}:{profileInfo: ProfileInfo}
                     message: `Password is incorrect`
                 }
             }else{
-                const hashedPassword:string = await bcrypt.hash(profileInfo.password,10);
+                const hashedPassword:string = await bcrypt.hash(profileInfo.newPassword!,10);
                 user.password = hashedPassword;
             }
         }
@@ -93,10 +94,13 @@ export const updateProfileInfo = async ({profileInfo}:{profileInfo: ProfileInfo}
         }
 
         user.name = profileInfo.name;
-        user.bio = profileInfo.username;
+        user.bio = profileInfo.bio;
+        await user.save();
 
-        
-
+        return {
+            success: true,
+            message: 'Profile info updated successfully'
+        }
     }catch{
         return {
             success: false,

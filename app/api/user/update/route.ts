@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { updateProfileInfo } from "@/controllers/updateImages.user";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest): Promise<NextResponse> =>{
@@ -12,7 +13,23 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
             })
         }
 
-        const {name,username,email,bio} = await request.json();
+        const {name,username,email,bio,password,newPassword,retypePassword} = await request.json();
+        const response = await updateProfileInfo({
+        profileInfo: {name,username,email,bio,password,newPassword,retypePassword}
+        },session.user.id);
+
+        if(response.success){
+            return NextResponse.json({
+                message: response.message
+            })
+        }else{
+            return NextResponse.json({
+                message: response.message
+            },{
+                status: 400
+            })
+        }
+
     }catch{
         return NextResponse.json({
             message:"Failed to update profile info"
