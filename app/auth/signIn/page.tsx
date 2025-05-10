@@ -215,7 +215,7 @@ function Page() {
                             <div className="grid grid-cols-2 gap-3">
                                 <button
                                 type="button"
-                                onClick={() => signIn('google',{ callbackUrl: '/dashboard' })}
+                                onClick={() => signIn('google',{ callbackUrl: '/hub' })}
                                 className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                                 >
                                 <Image

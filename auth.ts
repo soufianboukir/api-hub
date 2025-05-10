@@ -18,6 +18,7 @@ type ReturnedUser = {
     email: string,
     username: string
 }
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Google({
@@ -75,6 +76,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 if (existingUser) {
                     user.id = existingUser._id.toString();
+                    user.name = existingUser.name;
+                    user.email = existingUser.email;
+                    user.username = existingUser.username;
+                    user.defaultColor = existingUser.defaultColor;
+                    user.profile_picture = existingUser.profile_picture;
+                    user.bg_picture = existingUser.bg_picture;
                 } else {
                     const newUser = await User.create({
                         name: profile?.name,
@@ -88,10 +95,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
             return true;
         },
-        async jwt({token,user}){
+        async jwt({ token, user, trigger }) {
             if (user) {
                 token.user = user;
             }
+            
+            if (trigger === "update") {
+                await dbConnection();
+                const updatedUser = await User.findById(token.user?.id);
+                if (updatedUser) {
+                    token.user = {
+                        id: updatedUser._id.toString(),
+                        name: updatedUser.name,
+                        email: updatedUser.email,
+                        username: updatedUser.username,
+                        defaultColor: updatedUser.defaultColor,
+                        profile_picture: updatedUser.profile_picture,
+                        bg_picture: updatedUser.bg_picture,      
+                    };
+                }
+            }
+            
             return token;
         },
         async session({session,token}){

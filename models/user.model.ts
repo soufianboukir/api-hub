@@ -6,9 +6,9 @@ export interface UserI extends Document{
     username: string,
     defaultColor: string,
     password: string,
-    bio: string,
-    profile_picture: string,
-    bg_picture: string,
+    bio?: string,
+    profile_picture?: string,
+    bg_picture?: string,
 }
 
 

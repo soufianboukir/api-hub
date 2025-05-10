@@ -58,8 +58,10 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
           <DropdownMenuItem>
             Favorite APIs
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
+          <DropdownMenuItem asChild>
+            <Link href={`/user/settings`}>
+              User Settings
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             Keyboard shortcuts

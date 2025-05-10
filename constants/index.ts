@@ -51,3 +51,6 @@ export const generateUniqueUsername = (fullName: string | null | undefined):stri
     const index = Math.floor(Math.random() * formats.length);
     return formats[index];
 }
+
+
+export const defaultBio:string = "Introduce yourself and provide information about your online presence,sharing details about where others can connect with you across various platforms on the web."

@@ -1,22 +1,17 @@
 'use client'
 
+import { UserI } from '@/models/user.model'
 import { updateUserProfile } from '@/services/users'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
-type User = {
-    profile_picture?: string,
-    bg_picture?: string,
-    name: string,
-    username: string,
-    defaultColor: string
-}
 
 
-export const UploadProfileImages = ({user} : {user: User}) => {
-    const [currentUser,setCurrentUser] = useState<User>(user); 
-
+export const UploadProfileImages = ({user,isOwner} : {user: UserI, isOwner: boolean}) => {
+    const [currentUser,setCurrentUser] = useState(user);
+    const { update } = useSession();
     const handleUpload = async(e:React.ChangeEvent<HTMLInputElement>, type: 'profile' | 'background') =>{
         const file = e.target.files?.[0];
         if(!file){
@@ -33,13 +28,16 @@ export const UploadProfileImages = ({user} : {user: User}) => {
 
         toast.promise(response, {
             loading: 'Uploading...',
-            success: (res) => {
+            success: async (res) => {
                 const newPath = res.data.path;
                 if (type === 'profile') {
                     setCurrentUser((prev) => ({ ...prev, profile_picture: newPath }));
+                    await update({profile_picture:currentUser.profile_picture});
                 } else {
                     setCurrentUser((prev) => ({ ...prev, bg_picture: newPath }));
+                    await update({bg_picture:currentUser.bg_picture});
                 }
+                await update({profile_picture:currentUser.profile_picture});
                 return res.data.message;
                 },
             error: (err) => err?.response?.data?.error || 'Upload failed',
@@ -63,10 +61,14 @@ export const UploadProfileImages = ({user} : {user: User}) => {
                     )
                 }
 
-                <label className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-md">
-                    <input type="file" hidden onChange={(e) => handleUpload(e,'background')}/>
-                    <span className="text-white font-semibold">Change Background</span>
-                </label>
+                {
+                    isOwner && (
+                        <label className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-md">
+                            <input type="file" hidden onChange={(e) => handleUpload(e,'background')}/>
+                            <span className="text-white font-semibold">Change Background</span>
+                        </label>
+                    )
+                }
             </div>
 
             <div className='absolute left-20 top-28'>
@@ -87,10 +89,14 @@ export const UploadProfileImages = ({user} : {user: User}) => {
                         )
                     }
 
-                    <label className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-full">
-                        <input type="file" hidden onChange={(e) => handleUpload(e,'profile')}/>
-                        <span className="text-white font-semibold text-sm">Change Photo</span>
-                    </label>
+                    {
+                        isOwner && (
+                            <label className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-full">
+                                <input type="file" hidden onChange={(e) => handleUpload(e,'profile')}/>
+                                <span className="text-white font-semibold text-sm">Change Photo</span>
+                            </label>
+                        )
+                    }
                 </div>
             </div>
         </div>

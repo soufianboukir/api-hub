@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { UploadProfileImages } from '@/components/client/UploadProfileImages';
 import { fetchUserData } from '@/services/users';
 import { SquarePen } from 'lucide-react';
@@ -22,10 +23,8 @@ export async function generateMetadata({params}:UserProfilePageProps):Promise<Me
 async function page({params}:UserProfilePageProps) {
     const { username } = params;
     const data = await fetchUserData(username);
-    console.log(data);
-    
-    
-    // const userAPIs = fetchUserAPIs();
+    const loggedInUser = await auth();
+    const isOwner = loggedInUser?.user.username === username;
 
     if(!data.user){
         redirect(`/user-not-found?username=${username}`);
@@ -33,7 +32,7 @@ async function page({params}:UserProfilePageProps) {
 
     return (
         <div className="p-4 w-[100%]">
-            <UploadProfileImages user={data.user}/>
+            <UploadProfileImages user={data.user} isOwner={isOwner}/>
 
             <br />
             <br />
@@ -41,11 +40,15 @@ async function page({params}:UserProfilePageProps) {
 
             <div className='flex gap-5 items-center'>
                 <h1 className="text-2xl font-bold mt-4">{data.user.username}</h1>
-                <div className='w-10 h-10 rounded-sm mt-4 duration-100 hover:bg-gray-100 cursor-pointer flex justify-center items-center'>
-                    <Link href={'/user/settings'}>
-                        <SquarePen className='text-gray-700'/>
-                    </Link>
-                </div>
+                {
+                    isOwner && (
+                        <div className='w-10 h-10 rounded-sm mt-4 duration-100 hover:bg-gray-100 cursor-pointer flex justify-center items-center'>
+                            <Link href={'/user/settings'}>
+                                <SquarePen className='text-gray-700'/>
+                            </Link>
+                        </div>
+                    )
+                }
             </div>
 
             <div className='mt-5'>
