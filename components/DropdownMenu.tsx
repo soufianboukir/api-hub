@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
-import tux from '@/public/tux.jpg'
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
@@ -23,7 +22,7 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
         {
           session?.user?.profile_picture ? (
             <Image
-              src={tux} 
+              src={session.user.profile_picture} 
               width={30}
               height={30}
               alt="Application logo"

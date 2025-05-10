@@ -1,3 +1,4 @@
+import { updateUserImage } from "@/controllers/updateImages.user";
 import { writeFile } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
@@ -25,10 +26,22 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
         const uploadPath = path.join(process.cwd(), 'public', 'uploads', filename);
 
         await writeFile(uploadPath, buffer);
+        const updateInDb = await updateUserImage(username,`/uploads/${filename}`,type);
 
-        return NextResponse.json({
-            message: `${type} picture updated successfully!`,
-        })
+        if(updateInDb.success){
+            return NextResponse.json({
+                message: `${type} picture updated successfully!`,
+                path: `/uploads/${filename}`,
+            })
+        }else{
+            return NextResponse.json({
+                message: updateInDb.message,
+            },
+            {
+                status : 400,
+            })
+        }
+
     }catch{
         return NextResponse.json(
             {
