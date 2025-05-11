@@ -82,6 +82,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     user.defaultColor = existingUser.defaultColor;
                     user.profile_picture = existingUser.profile_picture;
                     user.bg_picture = existingUser.bg_picture;
+                    user.bio = existingUser.bio;
                 } else {
                     const newUser = await User.create({
                         name: profile?.name,
@@ -112,6 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         defaultColor: updatedUser.defaultColor,
                         profile_picture: updatedUser.profile_picture,
                         bg_picture: updatedUser.bg_picture,      
+                        bio: updatedUser.bio
                     };
                 }
             }

@@ -1,5 +1,7 @@
 import { auth } from '@/auth';
+import { ApiCard } from '@/components/client/ApiCard';
 import { UploadProfileImages } from '@/components/client/UploadProfileImages';
+import { Button } from '@/components/ui/button';
 import { fetchUserData } from '@/services/users';
 import { SquarePen } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -54,6 +56,21 @@ async function page({params}:UserProfilePageProps) {
             <div className='mt-5'>
                 <h1 className='text-xl font-semibold'>Published APIs</h1>
                 <hr className='w-[11%] border border-blue-400'/>
+            </div>
+
+            <div className='flex justify-center'>
+                <div className='mt-10'>
+                    <Button className='bg-blue-500 hover:bg-blue-700 cursor-pointer'>
+                        Publish API
+                    </Button>
+                </div>
+            </div>
+            <div className='grid lg:grid-cols-3 gap-2 mt-6'>
+                <ApiCard />
+                <ApiCard />
+                <ApiCard />
+                <ApiCard />
+                <ApiCard />
             </div>
         </div>
     )

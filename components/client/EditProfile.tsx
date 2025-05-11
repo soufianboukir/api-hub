@@ -16,6 +16,7 @@ import { Textarea } from "../ui/textarea"
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
 import { toast } from "sonner"
 import { updateUserProfileInfo } from "@/services/users"
+import { useSession } from "next-auth/react"
 
 
 export type ProfileInfo = {
@@ -32,6 +33,7 @@ export function EditProfile({profileInfo, setProfileInfo}:
     {profileInfo: ProfileInfo, setProfileInfo:Dispatch<SetStateAction<ProfileInfo | null>>}) {
     
     const [form,setForm] = useState(profileInfo);
+    const { update } = useSession();
 
     const handleChange = (e:ChangeEvent<HTMLInputElement  | HTMLTextAreaElement>) =>{
         setForm({ ...form, [e.target.id]: e.target.value });
@@ -39,19 +41,20 @@ export function EditProfile({profileInfo, setProfileInfo}:
 
     const handleSubmit = async ()=>{
         const response = updateUserProfileInfo(form);
-        console.log(response);
-        // implement the updating in the client side!!!!!!!
-        // implement the updating in the client side!!!!!!!
-        // implement the updating in the client side!!!!!!!
-        // implement the updating in the client side!!!!!!!
-        // implement the updating in the client side!!!!!!!
 
         toast.promise(response, {
             loading: 'Uploading...',
             success: async (res) => {
+                setProfileInfo(form)
+                await update({
+                    name: form.name,
+                    bio: form.bio,
+                    email: form.email,
+                    username: form.username,
+                });
                 return res.data.message;
             },
-            error: (err) => err?.response?.data?.error || 'Upload failed',
+            error: (err) => err?.response?.data?.message || 'Upload failed',
         });
     }
   return (

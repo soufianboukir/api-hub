@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const Settings = () => {
     const { data: session, status} = useSession();
 
-    const [profileInfo,setProfileInfo] = useState<ProfileInfo | null>(null);
+    const [profileInfo,setProfileInfo] = useState<ProfileInfo | null>(null);    
 
     useEffect(() => {
         if (session?.user) {

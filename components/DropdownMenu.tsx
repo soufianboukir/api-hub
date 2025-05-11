@@ -68,7 +68,11 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
+        <DropdownMenuItem>
+            <Link href="https://github.com/sofyanBoukir/api-hub" target="_blank"> 
+              Github
+            </Link> 
+        </DropdownMenuItem>
         <DropdownMenuItem disabled>API</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={() => signOut()}>
