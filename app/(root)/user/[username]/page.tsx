@@ -61,7 +61,9 @@ async function page({params}:UserProfilePageProps) {
             <div className='flex justify-center'>
                 <div className='mt-10'>
                     <Button className='bg-blue-500 hover:bg-blue-700 cursor-pointer'>
-                        Publish API
+                        <Link href={`/user/${username}/publishApi`}>
+                            Publish API
+                        </Link>
                     </Button>
                 </div>
             </div>
