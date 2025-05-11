@@ -1,4 +1,4 @@
-import mongoose, { Document, type ObjectId, Schema } from "mongoose";
+import mongoose, { type Document, models, type ObjectId, Schema } from "mongoose";
 
 type EndPoint = {
     url: string,
@@ -11,9 +11,10 @@ type Review = {
     review: string,
 }
 
-interface apiI extends Document{
+interface ApiI extends Document{
     authorId: ObjectId,
     categoryId: ObjectId,
+    avatar: string,
     title: string,
     description: string,
     endPoints?: EndPoint[],
@@ -25,9 +26,10 @@ interface apiI extends Document{
 
 
 
-const apiShema = new Schema<apiI>({
+const apiShema = new Schema<ApiI>({
     authorId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true},
+    avatar: {type: String, required: true},
     title: {
         type: String,
         required: true
@@ -67,4 +69,7 @@ const apiShema = new Schema<apiI>({
     ]
 }, {
     timestamps: true
-})
+});
+
+const Api = models.Api || mongoose.model<ApiI>('Api',apiShema);
+export default Api;
