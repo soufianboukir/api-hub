@@ -6,7 +6,7 @@ export const GET = async (request:NextRequest): Promise<NextResponse> =>{
     try{
         const url = new URL(request.url);
         const limitParam = url.searchParams.get('limit');
-        const limit: number = limitParam ? parseInt(limitParam) : 10;
+        const limit: number = limitParam ? parseInt(limitParam) : 1000;
 
         await dbConnection();
         const categories = await Category.find({}).limit(limit);
