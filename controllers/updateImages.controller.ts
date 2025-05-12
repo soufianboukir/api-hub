@@ -1,11 +1,11 @@
 import { ProfileInfo } from "@/components/client/EditProfile";
 import { dbConnection } from "@/lib/dbConnection"
 import User, { UserI } from "@/models/user.model";
+import { ControllerResponse } from "@/types";
 import bcrypt from "bcryptjs";
 
-export const updateUserImage = async (username: string,path: string,type: 'profile' | 'background') =>{
+export const updateUserImage = async (username: string,path: string,type: 'profile' | 'background'):Promise<ControllerResponse> =>{
     try{
-        await dbConnection();
         const user:UserI | null = await User.findOne({username});
         if(!user){
             return {
@@ -33,7 +33,7 @@ export const updateUserImage = async (username: string,path: string,type: 'profi
     }
 }
 
-export const updateProfileInfo = async ({profileInfo}:{profileInfo: ProfileInfo}, id: string) =>{
+export const updateProfileInfo = async ({profileInfo}:{profileInfo: ProfileInfo}, id: string):Promise<ControllerResponse> =>{
     try{
         await dbConnection();
         const user: UserI | null = await User.findById(id);

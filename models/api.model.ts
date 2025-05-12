@@ -1,12 +1,13 @@
 import mongoose, { type Document, models, type ObjectId, Schema } from "mongoose";
+import { type StaticImageData } from "next/image";
 
-type EndPoint = {
+export type EndPoint = {
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     description: string,
 }
 
-type Review = {
+export type Review = {
     authorId: string,
     review: string,
 }
@@ -14,10 +15,11 @@ type Review = {
 interface ApiI extends Document{
     authorId: ObjectId,
     categoryId: ObjectId,
-    avatar: string,
+    avatar: StaticImageData,
     title: string,
     description: string,
     endPoints?: EndPoint[],
+    baseUrl?: string,
     githubLink?: string,
     gitLabLink?: string,
     documentationUrl?: string,
@@ -49,6 +51,9 @@ const apiShema = new Schema<ApiI>({
             }
         }
     ],
+    baseUrl :{
+        type: String
+    },
     githubLink: {
         type: String
     },

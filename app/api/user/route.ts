@@ -6,7 +6,6 @@ export const GET = async (request:NextRequest): Promise<NextResponse> =>{
     try{
         const url = new URL(request.url);
         const username: string = url.searchParams.get('username') ?? '';
-        console.log('Searchng for ',username);
         
         await dbConnection();
         const user:UserI | null = await User.findOne(

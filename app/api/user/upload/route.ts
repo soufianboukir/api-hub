@@ -1,4 +1,4 @@
-import { updateUserImage } from "@/controllers/updateImages.user";
+import { updateUserImage } from "@/controllers/updateImages.controller";
 import { dbConnection } from "@/lib/dbConnection";
 import User, { UserI } from "@/models/user.model";
 import { writeFile } from "fs/promises";

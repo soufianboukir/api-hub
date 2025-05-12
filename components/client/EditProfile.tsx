@@ -43,7 +43,7 @@ export function EditProfile({profileInfo, setProfileInfo}:
         const response = updateUserProfileInfo(form);
 
         toast.promise(response, {
-            loading: 'Uploading...',
+            loading: 'Updating...',
             success: async (res) => {
                 setProfileInfo(form)
                 await update({
