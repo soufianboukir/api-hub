@@ -13,7 +13,7 @@ export const Header = async () => {
     const session:Session | null = await auth();
     
     return (
-        <header className='flex justify-between items-center px-2 lg:px-10 py-1 h-[8vh] border-b border-b-gray-300 fixed z-20 w-[100%]'>
+        <header className='flex bg-white dark:bg-inherit justify-between items-center px-2 lg:px-10 py-1 h-[8vh] border-b border-b-gray-300 fixed z-20 w-[100%]'>
             <div>
                 <Link href={'/'}>
                     <Image 

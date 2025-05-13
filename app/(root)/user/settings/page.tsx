@@ -42,41 +42,41 @@ const Settings = () => {
                 <br /><br /><br /><br />
                 {
                     profileInfo && (
-                        <div className="p-6 bg-gray-50 rounded-xl shadow-md">
+                        <div className="p-6 light:bg-gray-50 rounded-xl shadow-md">
                             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-                                <div className="bg-white p-5 rounded-xl shadow-sm">
-                                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Name</h2>
+                                <div className="light:bg-white p-5 rounded-xl shadow-sm">
+                                    <h2 className="text-lg font-semibold light:text-gray-800 mb-2">Name</h2>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-600 text-base">{profileInfo.name}</span>
+                                        <span className="light:text-gray-600 text-base">{profileInfo.name}</span>
                                     </div>
                                 </div>
         
-                                <div className="bg-white p-5 rounded-xl shadow-sm">
-                                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Username</h2>
+                                <div className="light:bg-white p-5 rounded-xl shadow-sm">
+                                    <h2 className="text-lg font-semibold light:text-gray-800 mb-2">Username</h2>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-600 text-base">{profileInfo.username}</span>
+                                        <span className="light:text-gray-600 text-base">{profileInfo.username}</span>
                                     </div>
                                 </div>
         
-                                <div className="bg-white p-5 rounded-xl shadow-sm">
-                                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Email</h2>
+                                <div className="light:bg-white p-5 rounded-xl shadow-sm">
+                                    <h2 className="text-lg font-semibold light:text-gray-800 mb-2">Email</h2>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-600 text-base">{profileInfo.email}</span>
+                                        <span className="light:text-gray-600 text-base">{profileInfo.email}</span>
                                     </div>
                                 </div>
         
-                                <div className="bg-white p-5 rounded-xl shadow-sm">
-                                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Password</h2>
+                                <div className="light:bg-white p-5 rounded-xl shadow-sm">
+                                    <h2 className="text-lg font-semibold light:text-gray-800 mb-2">Password</h2>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-600 text-base">********</span>
+                                        <span className="light:text-gray-600 text-base">********</span>
                                     </div>
                                 </div>
                             </div>
                             <br />
-                            <div className="bg-white p-5 rounded-xl shadow-sm">
-                                <h2 className="text-lg font-semibold text-gray-800 mb-2">About</h2>
+                            <div className="light:bg-white p-5 rounded-xl shadow-sm">
+                                <h2 className="text-lg font-semibold light:text-gray-800 mb-2">About</h2>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-gray-600 text-base">
+                                    <span className="light:text-gray-600 text-base">
                                         {
                                             profileInfo.bio ?
                                                 profileInfo.bio

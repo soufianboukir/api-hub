@@ -74,7 +74,7 @@ function Page() {
         }
     };
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br light:from-blue-50 light:to-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                     <Image 
@@ -86,10 +86,10 @@ function Page() {
                         className="hover:scale-105 transition-transform duration-300"
                     />
                 </div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-800">
+                <h2 className="mt-6 text-center text-3xl font-extrabold light:text-gray-800">
                     Welcome back
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
+                <p className="mt-2 text-center text-sm light:text-gray-600">
                     {"Don't have an account? "}
                     <Link href="/auth/signUp" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                         Sign up
@@ -98,7 +98,7 @@ function Page() {
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-6 shadow-lg rounded-xl sm:px-10 border border-gray-100">
+                <div className="light:bg-white py-8 px-6 shadow-lg rounded-xl sm:px-10 border border-gray-100">
                     {errors.form && (
                         <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md text-sm flex items-center">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +110,7 @@ function Page() {
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="email" className="block text-sm font-medium light:text-gray-700 mb-1">
                                 Email address
                             </label>
                             <div className="relative mt-1 rounded-md shadow-sm">
@@ -139,7 +139,7 @@ function Page() {
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="password" className="block text-sm font-medium light:text-gray-700 mb-1">
                                 Password
                             </label>
                             <div className="relative mt-1 rounded-md shadow-sm">
@@ -205,7 +205,7 @@ function Page() {
                                 <div className="w-full border-t border-gray-300"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white text-gray-500">
+                                <span className="px-2 bg-white dark:bg-[#1a1a1a] light:text-gray-500">
                                     Or continue with
                                 </span>
                             </div>
@@ -214,22 +214,21 @@ function Page() {
                         <div className="space-y-4 mt-4">
                             <div className="grid grid-cols-2 gap-3">
                                 <button
-                                type="button"
-                                onClick={() => signIn('google',{ callbackUrl: '/hub' })}
-                                className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                <Image
-                                    src={googleLogo}
-                                    alt="Google" 
-                                    className="w-7 h-7 mr-2"
-                                />
-                                Google
+                                    type="button"
+                                    onClick={() => signIn('google',{ callbackUrl: '/hub' })}
+                                    className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm light:bg-white text-sm font-medium light:text-gray-700 light:hover:bg-gray-50 transition-colors"
+                                    >
+                                    <Image
+                                        src={googleLogo}
+                                        alt="Google" 
+                                        className="w-7 h-7 mr-2"
+                                    />
+                                    Google
                                 </button>
 
                                 <button
                                 type="button"
-                                onClick={() => {/* Handle GitHub login */}}
-                                className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                                className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm light:bg-white text-sm font-medium light:text-gray-700 light:hover:bg-gray-50 transition-colors"
                                 >
                                 <Image
                                     src={githubLogo}

@@ -10,7 +10,7 @@ async function page() {
         <div className='w-[100%]'>
             <h1 className='text-2xl font-semibold'>Categories</h1>
             <br />
-            <div className="flex gap-4 flex-wrap mt-2">                    
+            <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-4 mt-2">                    
                 {
                     categories && categories.length ? (
                         categories.map((category) => (

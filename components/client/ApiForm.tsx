@@ -54,9 +54,7 @@ type ApiFormProps = {
     },
 }
 
-const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
-    console.log(apiForm);
-    
+const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {    
     const [avatar, setAvatar] = useState(apiForm?.avatar || avatars[0])
 
     const [formData, setFormData] = useState<ApiFormInterface>({
@@ -164,14 +162,14 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
             </div>
 
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-800 ">
+                <h1 className="text-3xl font-bold light:text-gray-800 ">
                     {
                         type === 'publish' ?
                         "Publish New API 🚀" 
                         : "Edit your API"
                     }
                 </h1>
-                <p className="text-gray-600 text-sm mt-2">
+                <p className="light:text-gray-600 text-sm mt-2">
                     Share your API with the community and make it discoverable to developers worldwide.
                 </p>
             </div>
@@ -179,7 +177,7 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                     <div>
-                        <Label className="text-lg font-medium text-gray-700">Title *</Label>
+                        <Label className="text-lg font-medium light:text-gray-700">Title *</Label>
                         <Input
                         placeholder="Ex: Weather API"
                         className="mt-2 bg-white"
@@ -189,7 +187,7 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                     </div>
 
                     <div>
-                        <Label className="text-lg font-medium text-gray-700 ">Description *</Label>
+                        <Label className="text-lg font-medium light:text-gray-700 ">Description *</Label>
                         <Textarea
                             rows={5}
                             placeholder="Describe what your API does..."
@@ -200,29 +198,29 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                     </div>
 
                     <div>
-                        <Label className="text-lg font-medium text-gray-700 ">Category *</Label>
+                        <Label className="text-lg font-medium light:text-gray-700 ">Category *</Label>
                         <CategorySelect value={formData.category} onChange={(val) => handleChange('category', val)} />
                     </div>
                 </div>
 
                 <div className="space-y-6">
-                    <div className="bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border border-gray-200 bg-gray-800border-gray-700">
-                        <h3 className="text-xl font-semibold text-gray-800  mb-4">Repository Links</h3>
+                    <div className="light:bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border light:border-gray-200 bg-gray-800border-gray-700">
+                        <h3 className="text-xl font-semibold light:text-gray-800  mb-4">Repository Links</h3>
                         <div className="space-y-4">
                             <div>
-                                <Label className="text-gray-700 ">GitHub</Label>
+                                <Label className="light:text-gray-700 ">GitHub</Label>
                                 <Input
                                 placeholder="https://github.com/..."
-                                className="mt-2 bg-white bg-gray-800bg-gray-800"
+                                className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                                 value={formData.github}
                                 onChange={(e) => handleChange('github', e.target.value)}
                                 />
                             </div>
                             <div>
-                                <Label className="text-gray-700 ">GitLab</Label>
+                                <Label className="light:text-gray-700 ">GitLab</Label>
                                 <Input
                                 placeholder="https://gitlab.com/..."
-                                className="mt-2 bg-white bg-gray-800bg-gray-800"
+                                className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                                 value={formData.gitlab}
                                 onChange={(e) => handleChange('gitlab', e.target.value)}
                                 />
@@ -230,12 +228,12 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                         </div>
                     </div>
 
-                    <div className="bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border border-gray-200 bg-gray-800border-gray-700">
-                        <h3 className="text-xl font-semibold text-gray-800  mb-4">Documentation</h3>
-                            <Label className="text-gray-700 ">Docs URL</Label>
+                    <div className="light:bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border light:border-gray-200 bg-gray-800border-gray-700">
+                        <h3 className="text-xl font-semibold light:text-gray-800  mb-4">Documentation</h3>
+                            <Label className="light:text-gray-700 ">Docs URL</Label>
                             <Input
                             placeholder="https://api-docs.example.com"
-                            className="mt-2 bg-white bg-gray-800bg-gray-800"
+                            className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                             value={formData.documentation}
                             onChange={(e) => handleChange('documentation', e.target.value)}
                             />
@@ -243,14 +241,14 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                 </div>
             </div>
 
-            <div className="mt-10 bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border border-gray-200 bg-gray-800border-gray-700">
-                <h3 className="text-xl font-semibold text-gray-800  mb-4">API Endpoints</h3>
+            <div className="mt-10 light:bg-gray-50 bg-gray-800bg-gray-800/50 p-6 rounded-lg border light:border-gray-200 bg-gray-800border-gray-700">
+                <h3 className="text-xl font-semibold light:text-gray-800  mb-4">API Endpoints</h3>
 
                 <div className="mb-6">
-                    <Label className="text-gray-700 ">Base URL</Label>
+                    <Label className="light:text-gray-700 ">Base URL</Label>
                     <Input
                         placeholder="https://api.example.com/v1"
-                        className="mt-2 bg-white bg-gray-800bg-gray-800"
+                        className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                         value={formData.baseUrl}
                         onChange={(e) => handleChange('baseUrl', e.target.value)}
                     />
@@ -260,17 +258,17 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                     <div key={index} className="space-y-4 mb-6 border-b pb-4">
                         <div className="grid grid-cols-12 gap-4">
                             <div className="col-span-3">
-                                <Label className="text-gray-700 ">Method</Label>
+                                <Label className="light:text-gray-700 ">Method</Label>
                                 <ApiMethodSelect
                                 value={endpoint.method}
                                 onChange={(val) => handleEndpointChange(index, 'method', val)}
                                 />
                             </div>
                             <div className="col-span-9">
-                                <Label className="text-gray-700 ">Endpoint Path</Label>
+                                <Label className="light:text-gray-700 ">Endpoint Path</Label>
                                 <Input
                                 placeholder="/weather/{city}"
-                                className="mt-2 bg-white bg-gray-800bg-gray-800"
+                                className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                                 value={endpoint.url}
                                 onChange={(e) => handleEndpointChange(index, 'url', e.target.value)}
                                 />
@@ -278,10 +276,10 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                         </div>
 
                         <div>
-                            <Label className="text-gray-700 ">Description</Label>
+                            <Label className="light:text-gray-700 ">Description</Label>
                             <Textarea
                                 placeholder="What this endpoint does..."
-                                className="mt-2 bg-white bg-gray-800bg-gray-800"
+                                className="mt-2 light:bg-white bg-gray-800bg-gray-800"
                                 value={endpoint.description}
                                 onChange={(e) => handleEndpointChange(index, 'description', e.target.value)}
                             />
