@@ -1,38 +1,65 @@
+'use client'
+
 import Image from 'next/image'
 import React from 'react'
-import testImage from '../../assets/apiImageTEST.png'
 import { Bolt, Heart } from 'lucide-react'
+import { SimplifiedApi } from '@/interfaces/api'
+import { formatDate } from '@/lib/formatDate'
+import Link from 'next/link'
 
-export const ApiCard = () => {
+interface ApiCardProps {
+    api: SimplifiedApi,
+    isOwner: boolean
+}
+
+
+
+export const ApiCard = ({api,isOwner} : ApiCardProps) => {
+    
     return (
-        <div className='px-5 py-3 shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 duration-100'>
+        <div className='px-5 py-3 shadow-sm border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 duration-100 bg-white dark:bg-gray-900'>
             <div className='flex items-center justify-between'>
-                <span className='bg-blue-100 px-3 py-1 rounded-md'>Cybersecurity</span>
+                <span className='bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-md'>
+                    {api.category.name}
+                </span>
+
                 <div className='flex gap-2'>
-                    <Bolt className='w-5 h-5 cursor-pointer'/>
-                    <Heart className='w-5 h-5 cursor-pointer'/>
+                    {isOwner && (
+                        <Link href={`/user/${api.author.username}/editApi/${api._id}`}>
+                        <Bolt className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
+                        </Link>
+                    )}
+                    <Heart className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
                 </div>
             </div>
-            <div className='flex gap-2 mt-2 items-start'>
-                <div className='w-[50%]'>
-                    <Image src={testImage}
-                    alt='Api image'
-                    width={60}
-                    height={60}
-                    className='rounded-full object-cover'/>
+
+            <div className="flex items-start gap-4 mt-4">
+                <div className="flex-shrink-0">
+                    <Image
+                        src={api.avatar}
+                        alt="API image"
+                        width={60}
+                        height={60}
+                        className="rounded-full object-cover w-[60px] h-[60px]"
+                    />
                 </div>
-                <div>
-                    <h1 className='text-2xl font-semibold'>TEST</h1>
-                    <span className='text-gray-600'>this is  the description
-                    this is  the descriptionthis is  the descriptionthis is  the descriptionthis is  the descriptionthis is  the description
-                    this is  the descriptionthis is  the descriptionthis is  the descriptionthis is  the descriptionthis is  the description
-                    </span>
+
+                <div className="flex flex-col">
+                    <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {api.title.length > 30 ? `${api.title.substring(0, 30)}...` : api.title}
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {api.description.length > 60 ? `${api.description.substring(0, 60)}...` : api.description}
+                    </p>
                 </div>
             </div>
+
             <br />
-            <div className='flex justify-between text-gray-500'>
-                <span>By sof1Boukir</span>
-                <span>Updated 4 days ago</span>
+            <div className='flex justify-between text-gray-500 dark:text-gray-400'>
+                <span>
+                    By <Link href={`/user/${api.author.username}`} className="hover:underline">{api.author.username}</Link>
+                </span>
+                <span>Updated {formatDate(api.updatedAt)}</span>
             </div>
         </div>
     )

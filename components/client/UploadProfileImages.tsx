@@ -52,7 +52,7 @@ export const UploadProfileImages = ({user,isOwner} : {user: UserI, isOwner: bool
                         <Image
                             src={currentUser.bg_picture}
                             alt="user background"
-                            className="w-full h-[200px] object-cover border border-gray-200 rounded-md shadow-lg"
+                            className="w-full h-[200px] object-cover border light:border-gray-200 rounded-md shadow-lg"
                             width={200}
                             height={200}
                         />
@@ -78,7 +78,7 @@ export const UploadProfileImages = ({user,isOwner} : {user: UserI, isOwner: bool
                             <Image
                                 src={currentUser.profile_picture}
                                 alt="user profile"
-                                className="w-40 h-40 object-cover border-2 border-gray-200 rounded-full shadow-lg"
+                                className="w-40 h-40 object-cover border-2 light:border-gray-200 rounded-full shadow-lg"
                                 width={200}
                                 height={200}
                             />

@@ -1,10 +1,8 @@
 import { auth } from '@/auth';
-import { ApiCard } from '@/components/client/ApiCard';
 import { UploadProfileImages } from '@/components/client/UploadProfileImages';
-import { Button } from '@/components/ui/button';
-import { fetchUserApis } from '@/services/apis';
+import UserApis from '@/components/client/UserApis';
 import { fetchUserData } from '@/services/users';
-import { SquarePen } from 'lucide-react';
+import { SquarePen, SquarePlus } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -32,51 +30,44 @@ async function page({params}:UserProfilePageProps) {
     if(!data.user){
         redirect(`/user-not-found?username=${username}`);
     }
-
-    const response = await fetchUserApis(username,1);
-    console.log(response);
     
     return (
-        <div className="p-4 w-[100%]">
-            <UploadProfileImages user={data.user} isOwner={isOwner}/>
+        <div className="w-full px-6 py-8 light:bg-white rounded-lg shadow-sm">
+            <UploadProfileImages user={data.user} isOwner={isOwner} />
 
-            <br />
-            <br />
-            <br />
+            <div className="mt-20 flex items-center justify-between flex-wrap">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{data.user.username}</h1>
 
-            <div className='flex gap-5 items-center'>
-                <h1 className="text-2xl font-bold mt-4">{data.user.username}</h1>
-                {
-                    isOwner && (
-                        <div className='w-10 h-10 rounded-sm mt-4 duration-100 hover:bg-gray-100 cursor-pointer flex justify-center items-center'>
-                            <Link href={'/user/settings'}>
-                                <SquarePen className='text-gray-700'/>
-                            </Link>
-                        </div>
-                    )
-                }
-            </div>
+                {isOwner && (
+                <div className="flex gap-3">
+                    <Link
+                    href="/user/settings"
+                    className="flex items-center gap-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition"
+                    >
+                    <SquarePen className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                    <span className="text-sm text-gray-700 dark:text-gray-200 hidden sm:inline">Edit Profile</span>
+                    </Link>
 
-            <div className='mt-5'>
-                <h1 className='text-xl font-semibold'>Published APIs</h1>
-                <hr className='w-[11%] border border-blue-400'/>
-            </div>
-
-            <div className='flex justify-center'>
-                <div className='mt-10'>
-                    <Button className='bg-blue-500 hover:bg-blue-700 cursor-pointer'>
-                        <Link href={`/user/${username}/publishApi`}>
-                            Publish API
-                        </Link>
-                    </Button>
+                    <Link
+                    href={`/user/${username}/publishApi`}
+                    className="flex items-center gap-1 px-3 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-md transition"
+                    >
+                    <SquarePlus className="w-5 h-5 text-blue-700 dark:text-blue-300" />
+                    <span className="text-sm text-blue-700 dark:text-blue-300 hidden sm:inline">Publish API</span>
+                    </Link>
                 </div>
+                )}
             </div>
-            <div className='grid lg:grid-cols-3 gap-2 mt-6'>
-                <ApiCard />
-                <ApiCard />
-                <ApiCard />
-                <ApiCard />
-                <ApiCard />
+
+            <div className="mt-10">
+                <div className="flex items-center gap-2 mb-1">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Published APIs</h2>
+                </div>
+                <hr className="w-32 border-t-2 border-blue-500" />
+            </div>
+
+            <div className="mt-6">
+                <UserApis username={username} isOwner={isOwner} />
             </div>
         </div>
     )

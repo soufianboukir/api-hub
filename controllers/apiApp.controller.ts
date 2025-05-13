@@ -11,15 +11,18 @@ interface ApiResponse extends ControllerResponse{
 
 
 export const fetchUserApis = async (userId: string, page: number= 1): Promise<ApiResponse> =>{
-    const limit = 4;
+    const limit = 6;
     const skip = (page - 1) * limit;
 
     try {
-        const apis = await Api.find({ authorId: userId })
+        const apis = await Api.find({ author: userId },{avatar:1,title:1,description:1,updatedAt:1})
                               .skip(skip)
-                              .limit(limit);
+                              .limit(limit)
+                              .sort({createdAt:-1})
+                              .populate('author','username')
+                              .populate('category','name');
 
-        const total = await Api.countDocuments({ authorId: userId });
+        const total = await Api.countDocuments({ author: userId });
 
         return {
             success: true,
@@ -42,13 +45,13 @@ export const publishApi = async (formData:ApiForm,authorId:string):Promise<Contr
         await dbConnection();
         const avatarUrl = typeof formData.avatar === 'object' ? formData.avatar.src : formData.avatar;
         await Api.create({
-            authorId,
-            categoryId: formData.categoryId,
+            author:authorId,
+            category: formData.category,
             title: formData.title,
             avatar: avatarUrl,
             description: formData.description,
             baseUrl: formData.baseUrl,
-            endPoins: formData.endpoints,
+            endPoints: formData.endpoints,
             githubLink: formData.github,
             gitLabLink: formData.gitlab,
             documentationUrl: formData.documentation,

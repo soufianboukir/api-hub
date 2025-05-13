@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import { useState } from 'react'
 
 import apiAvatar1 from '@/public/avatars/apiImage1.png'
@@ -20,7 +20,8 @@ import { Button } from '@/components/ui/button'
 import { ApiMethodSelect, CategorySelect } from '@/components/client/SelectFields'
 import { toast } from 'sonner'
 import { ApiForm as ApiFormInterface } from '@/interfaces/api'
-import { publishApi } from '@/services/apis'
+import { publishApi, updateApi } from '@/services/apis'
+import { EndPoint } from '@/models/api.model'
 
 const avatars = [
     apiAvatar1,
@@ -37,29 +38,48 @@ const avatars = [
 
 type ApiFormProps = {
     type: 'publish' | 'edit',
-    formData?: string,
+    apiId?: string,
+    apiForm?: {
+        avatar: StaticImageData,
+        title: string, 
+        description: string,
+        category:{
+            _id: string
+        },
+        githubLink: string,
+        gitLabLink: string,
+        documentationUrl: string,
+        baseUrl: string,
+        endPoints : EndPoint[],
+    },
 }
 
-const ApiForm = ({type}:  ApiFormProps) => {
-    const [avatar, setAvatar] = useState(avatars[0])
+const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
+    console.log(apiForm);
+    
+    const [avatar, setAvatar] = useState(apiForm?.avatar || avatars[0])
 
     const [formData, setFormData] = useState<ApiFormInterface>({
-        avatar:avatar,
-        title: '',
-        description: '',
-        categoryId: '',
-        github: '',
-        gitlab: '',
-        documentation: '',
-        baseUrl: '',
-        endpoints: [{ url: '', 
+        avatar: apiForm?.avatar || avatar,
+        title: apiForm?.title || '',
+        description: apiForm?.description || '',
+        category: apiForm?.category._id || '',
+        github: apiForm?.githubLink || '',
+        gitlab: apiForm?.gitLabLink || '',
+        documentation: apiForm?.documentationUrl || '',
+        baseUrl: apiForm?.baseUrl || '',
+        endpoints: apiForm?.endPoints || [{ url: '',
             method: 'GET',
-        description: '' }]
+            description: '' }]
     })
 
     const randomImage = () => {
         const randomIndex = Math.floor(Math.random() * avatars.length)
         setAvatar(avatars[randomIndex])
+        setFormData((prev) => ({
+            ...prev,
+            avatar: avatars[randomIndex]
+        }));
     }
 
     const handleChange = (key: string, value: string) => {
@@ -106,7 +126,7 @@ const ApiForm = ({type}:  ApiFormProps) => {
                     description: 'Please type a description'
                 })
                 return;
-            }else if(!formData.categoryId){
+            }else if(!formData.category){
                 toast.error('Submission error',{
                     description: 'Please select a category'
                 })
@@ -115,12 +135,19 @@ const ApiForm = ({type}:  ApiFormProps) => {
             
             switch (type){
                 case "publish":
-                    
                     toast.promise(publishApi(formData),{
                         loading: 'Uploading...',
                         success: (res) => res.data.message,
                         error : (err) => err?.res?.data.message || 'Upload failed'
                     })
+                    break;
+                case "edit":
+                    toast.promise(updateApi(formData,apiId!),{
+                        loading: 'Updating...',
+                        success: (res) => res.data.message,
+                        error : (err) => err?.res?.data.message || 'Update failed'
+                    })
+                    break;
             }
         }catch{
 
@@ -144,7 +171,7 @@ const ApiForm = ({type}:  ApiFormProps) => {
                         : "Edit your API"
                     }
                 </h1>
-                <p className="text-gray-600  mt-2">
+                <p className="text-gray-600 text-sm mt-2">
                     Share your API with the community and make it discoverable to developers worldwide.
                 </p>
             </div>
@@ -174,7 +201,7 @@ const ApiForm = ({type}:  ApiFormProps) => {
 
                     <div>
                         <Label className="text-lg font-medium text-gray-700 ">Category *</Label>
-                        <CategorySelect value={formData.categoryId} onChange={(val) => handleChange('categoryId', val)} />
+                        <CategorySelect value={formData.category} onChange={(val) => handleChange('category', val)} />
                     </div>
                 </div>
 
@@ -282,7 +309,7 @@ const ApiForm = ({type}:  ApiFormProps) => {
                 className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={handleSubmit}
                 >
-                    Publish API
+                    {type === 'publish' ? 'Publish' : 'Update'} API
                 </Button>
             </div>
         </div>

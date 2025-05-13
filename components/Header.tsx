@@ -7,12 +7,13 @@ import { Bell, Heart, Mail } from 'lucide-react'
 import { DropdownMenuDemo } from './DropdownMenu'
 import { Session } from 'next-auth'
 import { auth } from '@/auth'
+import { ModeToggle } from './ModeToggle'
 
 export const Header = async () => {
     const session:Session | null = await auth();
     
     return (
-        <header className='flex justify-between items-center px-2 lg:px-10 py-1 h-[8vh] border-b border-b-gray-300 fixed z-20 bg-white w-[100%]'>
+        <header className='flex justify-between items-center px-2 lg:px-10 py-1 h-[8vh] border-b border-b-gray-300 fixed z-20 w-[100%]'>
             <div>
                 <Link href={'/'}>
                     <Image 
@@ -29,22 +30,28 @@ export const Header = async () => {
                 <SearchInput />
             </div>
             <div className='flex gap-1 items-center'>
-                <div className='hover:bg-gray-100 duration-200 p-2 rounded-md cursor-pointer'>
+                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
                     <Link href={'/dashboard'}>
                         <span className='font-semibold text-sm'>Api marketplace</span>
                     </Link> 
                 </div>
-                <div className='hover:bg-gray-100 duration-200 p-2 rounded-md cursor-pointer'>
-                    <Bell className='w-5 h-5'/> 
-                </div>
 
-                <div className='hover:bg-gray-100 duration-200 p-2 rounded-md cursor-pointer'>
-                    <Heart className='w-5 h-5'/>
+                <div className='p-2 rounded-md'>
+                    <ModeToggle />
                 </div>
                 
-                <div className='hover:bg-gray-100 duration-200 p-2 rounded-md cursor-pointer'>
-                    <Mail className='w-5 h-5 cursor-pointer'/>
+                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+                    <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 </div>
+
+                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+                    <Heart className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                </div>
+
+                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+                    <Mail className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                </div>
+
 
                 <div className='p-2'>
                     <DropdownMenuDemo session={session} />

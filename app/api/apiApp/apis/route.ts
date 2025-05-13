@@ -7,21 +7,21 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (request: NextRequest): Promise<NextResponse> =>{
     try{
 
-        const session = await auth();
+        const session = await auth(request);
+        
         if(!session){
-            return NextResponse.json(
-                {
-                    error: "Unauthorized"
-                }, {
-                    status : 401,
-                }
-            ); 
+            return NextResponse.json({
+                message: "Unauthorized"
+            },{
+                status:401
+            })
         }
         const url = new URL(request.url);
         const pageParam = url.searchParams.get('page');
         const page = pageParam && !isNaN(Number(pageParam)) ? Number(pageParam) : 1;
         const username = url.searchParams.get('username');
 
+        
         await dbConnection();
         const user = await User.findOne({username});
         if(!user){

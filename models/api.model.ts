@@ -8,13 +8,13 @@ export type EndPoint = {
 }
 
 export type Review = {
-    authorId: string,
+    author: string,
     review: string,
 }
 
 export interface ApiI extends Document{
-    authorId: ObjectId,
-    categoryId: ObjectId,
+    author: ObjectId,
+    category: ObjectId,
     avatar: StaticImageData,
     title: string,
     description: string,
@@ -29,8 +29,8 @@ export interface ApiI extends Document{
 
 
 const apiShema = new Schema<ApiI>({
-    authorId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true},
+    author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true},
     avatar: {type: String, required: true},
     title: {
         type: String,
@@ -48,7 +48,8 @@ const apiShema = new Schema<ApiI>({
             },
             description: {
                 type: String,
-            }
+            },
+            method: {type: String, enum: ['GET','POST','PUT','DELETE']}
         }
     ],
     baseUrl :{
@@ -65,7 +66,7 @@ const apiShema = new Schema<ApiI>({
     },
     reviews : [
         {
-            authorId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+            author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
             review: {
                 type: String,
                 required: true

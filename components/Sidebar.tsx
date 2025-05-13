@@ -34,51 +34,54 @@ export const Sidebar = async () => {
 
 
     return (
-        <div className='bg-gray-50 w-[20%] border-r border-r-gray-200 pt-10 px-6 h-[92vh] mt-[8vh] fixed lg:block hidden'>
-            <div className='flex flex-col gap-2'>
-                <div className='hover:bg-sky-100 py-2 px-3 rounded-md cursor-pointer duration-200'>
-                    <Link href={'/hub'} className='flex flex-row gap-2 items-center font-semibold'>
-                        <Earth className='w-5 h-5'/>
-                        <span>Discovery</span>
-                    </Link>
+        <div className="bg-gray-50 dark:bg-[#1a1a1a] w-[20%] border-r border-gray-200 dark:border-gray-700 pt-10 px-6 h-[92vh] mt-[8vh] fixed lg:block hidden">
+            <div className="flex flex-col gap-2">
+                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
+                <Link href="/hub" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                    <Earth className="w-5 h-5" />
+                    <span>Discovery</span>
+                </Link>
                 </div>
 
-                <div className='hover:bg-sky-100 py-2 px-3 rounded-md cursor-pointer duration-200'>
-                    <Link href={'/workspace'} className='flex flex-row gap-2 items-center font-semibold'>
-                        <Star className='w-5 h-5'/>
-                        <span>Workspace</span>
-                    </Link>
+                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
+                <Link href="/workspace" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                    <Star className="w-5 h-5" />
+                    <span>Workspace</span>
+                </Link>
                 </div>
 
-                <div className='hover:bg-sky-100 py-2 px-3 rounded-md cursor-pointer duration-200'>
-                    <Link href={'/collections'} className='flex flex-row gap-2 items-center font-semibold'>
-                        <Folder className='w-5 h-5'/>
-                        <span>Collections</span>
-                    </Link>
+                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
+                <Link href="/collections" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                    <Folder className="w-5 h-5" />
+                    <span>Collections</span>
+                </Link>
                 </div>
             </div>
+
             <br />
-            <hr className='border border-gray-200' />
-            <div className='mt-2'>
-                <h1 className='font-semibold'>Categories</h1>
-                <div className='mt-4'>
-                    {
-                        categories && categories.length ? (
-                            categories.map((category) => (
-                                <div key={category._id as string} className='hover:bg-sky-100 py-2 px-3 rounded-md cursor-pointer duration-200'>
-                                    <Link href={`/search/${category.name}`} className='flex flex-row gap-2 items-center'>
-                                        <span>{category.name}</span>
-                                    </Link>
-                                </div>
-                            ))
-                        ) : "No category avaliable"
-                    }
-                    <div className='hover:bg-sky-100 py-2 px-3 rounded-md cursor-pointer duration-200'>
-                        <Link href={'/dashboard'} className='flex flex-row gap-2 items-center'>
-                            <AlignJustify className='w-5 h-5' strokeWidth={1.5}/>
-                            <span>More categories</span>
+            <hr className="border border-gray-200 dark:border-gray-700" />
+
+            <div className="mt-2">
+                <h1 className="font-semibold text-gray-800 dark:text-gray-200">Categories</h1>
+                <div className="mt-4">
+                {categories && categories.length ? (
+                    categories.map((category) => (
+                    <div key={category._id as string} className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
+                        <Link href={`/search/${category.name}`} className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
+                        <span>{category.name}</span>
                         </Link>
                     </div>
+                    ))
+                ) : (
+                    <span className="text-sm text-gray-500 dark:text-gray-400">No category available</span>
+                )}
+
+                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
+                    <Link href="/dashboard" className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
+                    <AlignJustify className="w-5 h-5" strokeWidth={1.5} />
+                    <span>More categories</span>
+                    </Link>
+                </div>
                 </div>
             </div>
         </div>
