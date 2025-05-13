@@ -18,7 +18,7 @@ export const POST = async (request: NextRequest):Promise<NextResponse> =>{
             return NextResponse.json({
                 message: "User not found"
             },{
-                status:401
+                status:404
             })
         }
 

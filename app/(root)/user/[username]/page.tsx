@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import { ApiCard } from '@/components/client/ApiCard';
 import { UploadProfileImages } from '@/components/client/UploadProfileImages';
 import { Button } from '@/components/ui/button';
+import { fetchUserApis } from '@/services/apis';
 import { fetchUserData } from '@/services/users';
 import { SquarePen } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -32,6 +33,9 @@ async function page({params}:UserProfilePageProps) {
         redirect(`/user-not-found?username=${username}`);
     }
 
+    const response = await fetchUserApis(username,1);
+    console.log(response);
+    
     return (
         <div className="p-4 w-[100%]">
             <UploadProfileImages user={data.user} isOwner={isOwner}/>

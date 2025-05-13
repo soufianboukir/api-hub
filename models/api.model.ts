@@ -12,7 +12,7 @@ export type Review = {
     review: string,
 }
 
-interface ApiI extends Document{
+export interface ApiI extends Document{
     authorId: ObjectId,
     categoryId: ObjectId,
     avatar: StaticImageData,
