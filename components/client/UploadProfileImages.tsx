@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 
 
 
-export const UploadProfileImages = ({user,isOwner} : {user: UserI, isOwner: boolean}) => {
+export const UploadProfileImages = ({user,isOwner} : {user: UserI, isOwner: boolean}) => {    
     const [currentUser,setCurrentUser] = useState(user);
     const { update } = useSession();
     const handleUpload = async(e:React.ChangeEvent<HTMLInputElement>, type: 'profile' | 'background') =>{

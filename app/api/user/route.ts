@@ -10,7 +10,11 @@ export const GET = async (request:NextRequest): Promise<NextResponse> =>{
         await dbConnection();
         const user:UserI | null = await User.findOne(
                         {username},
-                        {username:1,profile_picture:1,bg_picture:1,defaultColor:1});
+                        {username:1,
+                            profile_picture:1,
+                            bg_picture:1,
+                            defaultColor:1
+                        });
         if(user){
             return NextResponse.json({user});
         }

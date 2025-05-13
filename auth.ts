@@ -16,7 +16,9 @@ type ReturnedUser = {
     name: string,
     defaultColor: string,
     email: string,
-    username: string
+    username: string,
+    bg_picture?: string,
+    profile_picture?: string
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -56,7 +58,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     defaultColor: user.defaultColor,
                     name: user.name,
                     email: user.email,
-                    username: user.username
+                    username: user.username,
+                    bg_picture: user.bg_picture,
+                    profile_picture: user.profile_picture
                 };
             },
         })
