@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import {
   ChevronLeftIcon,
@@ -9,10 +10,9 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 interface PaginationControlsProps {
-  previous: () => void,
-  next: () => void,
+  previous: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  next: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
-
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (

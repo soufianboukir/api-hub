@@ -1,40 +1,37 @@
 'use client'
 
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Bolt, Heart, HeartOff } from 'lucide-react'
 import { SimplifiedApi } from '@/interfaces/api'
 import { formatDate } from '@/lib/formatDate'
 import Link from 'next/link'
-import { isFavorite } from '@/services/apis'
+import { favoriteApi, unfavoriteApi } from '@/services/apis'
+import { toast } from 'sonner'
 
 interface ApiCardProps {
     api: SimplifiedApi,
-    isOwner: boolean
+    isOwner: boolean,
+    isOnFavoritePage?: boolean 
 }
 
-export const ApiCard = ({api,isOwner} : ApiCardProps) => {
-    const [isAlreadyFavorite,setIsAlreadyFavorite] = useState(false);
-    const [loading,setLoading] = useState(true);
+export const ApiCard = ({api,isOwner,isOnFavoritePage} : ApiCardProps) => {
+    const favoriteThisApi = () =>{
+        toast.promise(favoriteApi(api._id),{
+            loading: 'Loading...',
+            success:(response) => response.data.message,
+            error: (err) => err.response.data.message
+        })
+    }
 
-    useEffect(() =>{    
-        const checkIsApiAlreadyFavorite = async () =>{
-            try{
-                setLoading(true);
-                const response = await isFavorite(api._id);
-                if(response.status === 200){
-                    setIsAlreadyFavorite(true);
-                }
-            }catch{
-                //
-            }finally{
-                setLoading(false)
-            }
-        }
-        checkIsApiAlreadyFavorite();
-    },[])
+    const unFavoriteThisApi = () =>{
+        toast.promise(unfavoriteApi(api._id),{
+            loading: 'Loading...',
+            success:(response) => response.data.message,
+            error: (err) => err.response.data.message
+        })
+    }
 
-    if(loading) return null;
     return (
         <div className='px-5 py-3 shadow-sm border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 duration-100 bg-white dark:bg-gray-900'>
             <div className='flex items-center justify-between'>
@@ -45,14 +42,15 @@ export const ApiCard = ({api,isOwner} : ApiCardProps) => {
                 <div className='flex gap-2'>
                     {isOwner && (
                         <Link href={`/user/${api.author.username}/editApi/${api._id}`}>
-                        <Bolt className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
+                            <Bolt className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
                         </Link>
                     )}
                     {
-                        !isAlreadyFavorite ? (
-                            <Heart className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
-                        ) : <HeartOff className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300'/>
+                        isOnFavoritePage ?
+                            <HeartOff className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' onClick={unFavoriteThisApi}/>
+                        : <Heart className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' onClick={favoriteThisApi}/>
                     }
+                        
                 </div>
             </div>
 

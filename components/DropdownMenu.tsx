@@ -23,11 +23,11 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
           session?.user?.profile_picture ? (
             <Image
               src={session.user.profile_picture} 
-              width={30}
-              height={30}
+              width={40}
+              height={40}
               alt="Application logo"
               priority
-              className='cursor-pointer object-cover rounded-full aspect-square' 
+              className='cursor-pointer object-cover rounded-full aspect-square dark:border-white border' 
             /> 
           ): (
             <div className={`w-8 h-8 text-white flex justify-center items-center rounded-full ${session?.user?.defaultColor} cursor-pointer`}>
@@ -56,7 +56,9 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            Favorite APIs
+            <Link href={`/user/${session?.user.username}/favorites`}>
+              Favorite APIs
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={`/user/settings`}>

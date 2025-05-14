@@ -28,7 +28,18 @@ export const updateApi = async (formData: ApiForm,apiId: string) =>{
     return response;
 }
 
-export const isFavorite = async (apiId: string) =>{
-    const response = await api.get(`/api/favorites/isFavorite?apiId=${apiId}`);
+export const getFavoriteApis = async (page: number) =>{
+    const response = await api.get(`/api/favorites?page=${page}`);
+    return response;
+}
+
+
+export const favoriteApi = async (apiId: string) =>{
+    const response = await api.post(`/api/favorites`,{apiId});
+    return response
+}
+
+export const unfavoriteApi = async (apiId: string) =>{
+    const response = await api.delete(`/api/favorites/${apiId}`);
     return response;
 }

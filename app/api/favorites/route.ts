@@ -75,14 +75,14 @@ export const POST = async (request: NextRequest):Promise<NextResponse> =>{
         }
         await dbConnection()
         const { apiId } = await request.json();
-
+        
         const exists = await FavoriteApi.findOne({ api: apiId, user: session.user.id });
         if (exists) {
             return NextResponse.json({
                 message: 'API is already in favorites',
             }, 
-        { status: 400 });
-}
+            { status: 400 });
+        }
 
         await FavoriteApi.create({
             api: apiId,

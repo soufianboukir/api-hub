@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ApiCard } from "./ApiCard";
 import { SimplifiedApi } from "@/interfaces/api";
 import { PaginationControls } from "../ui/pagination";
+import { handleNext, handlePrevious } from "@/functions";
 
 
 const UserApis = ({username,isOwner} : {username: string, isOwner: boolean}) => {
@@ -40,20 +41,6 @@ const UserApis = ({username,isOwner} : {username: string, isOwner: boolean}) => 
         fetchApis(page);
     }, []);
 
-    const handleNext = () => {
-        if (page < totalPages) {
-            setPage(page+1)
-            fetchApis(page + 1);
-        }
-    };
-
-    const handlePrevious = () => {
-        if (page > 1) {
-            setPage(page-1)
-            fetchApis(page - 1);
-        }
-    };
-
     if (loading) return <p>Loading APIs...</p>;
     return (
         <div>
@@ -69,7 +56,9 @@ const UserApis = ({username,isOwner} : {username: string, isOwner: boolean}) => 
             <br />
             {
                 apis && apis.length ? (
-                    <PaginationControls previous={handlePrevious} next={handleNext}/>
+                    <PaginationControls
+                        previous={() => handlePrevious({ page, setPage, getMore: fetchApis})}
+                        next={() => handleNext({page,totalPages,setPage,getMore:fetchApis})} />
                 ) : null
             }
         </div>
