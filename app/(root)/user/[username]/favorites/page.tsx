@@ -16,6 +16,7 @@ interface FavoriteApi {
     api: SimplifiedApi
 }
 
+
 const FavoriteApis = ({params}:{params:{username: string}}) => {
 
     const { data: session, status } = useSession();
