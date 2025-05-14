@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const DELETE = async (request: NextRequest,{params}:{params:{favoriteId: string}})
 :Promise<NextResponse> =>{
     try{
-        const session = await auth(request);
+        const session = await auth();
         if(!session){
             return NextResponse.json({
                 message: 'Unauthorized'
@@ -15,12 +15,22 @@ export const DELETE = async (request: NextRequest,{params}:{params:{favoriteId: 
             })
         }
         await dbConnection()
-        const { favoriteId } = params;
-        
-        await FavoriteApi.deleteOne({$and:[{_id:favoriteId},{user:session.user.id}]})
+        const { favoriteId } = await params;
 
+        const result = await FavoriteApi.deleteOne({
+            _id: favoriteId,
+            user: session.user.id,
+        });
+    
+        if (result.deletedCount === 0) {
+            return NextResponse.json(
+                { message: 'Favorite not found or unauthorized' },
+                { status: 404 }
+            );
+        }
+    
         return NextResponse.json({
-            message:"Api successfully removed from favorites!",
+            message: 'API successfully removed from favorites!',
         });
 
     }catch{

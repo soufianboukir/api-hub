@@ -11,7 +11,7 @@ interface ApiResponse extends ControllerResponse{
 
 
 export const fetchUserApis = async (userId: string, page: number= 1): Promise<ApiResponse> =>{
-    const limit = 1;
+    const limit = 6;
     const skip = (page - 1) * limit;
 
     try {

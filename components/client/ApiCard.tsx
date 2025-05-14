@@ -12,10 +12,11 @@ import { toast } from 'sonner'
 interface ApiCardProps {
     api: SimplifiedApi,
     isOwner: boolean,
-    isOnFavoritePage?: boolean 
+    isOnFavoritePage?: boolean,
+    favorite_id?: string,
 }
 
-export const ApiCard = ({api,isOwner,isOnFavoritePage} : ApiCardProps) => {
+export const ApiCard = ({api,isOwner,isOnFavoritePage,favorite_id} : ApiCardProps) => {
     const favoriteThisApi = () =>{
         toast.promise(favoriteApi(api._id),{
             loading: 'Loading...',
@@ -25,7 +26,7 @@ export const ApiCard = ({api,isOwner,isOnFavoritePage} : ApiCardProps) => {
     }
 
     const unFavoriteThisApi = () =>{
-        toast.promise(unfavoriteApi(api._id),{
+        toast.promise(unfavoriteApi(favorite_id!),{
             loading: 'Loading...',
             success:(response) => response.data.message,
             error: (err) => err.response.data.message

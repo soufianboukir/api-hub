@@ -5,20 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest):Promise<NextResponse> =>{
     try{
-        const session = await auth(request);
+        const session = await auth()
         if(!session){
             return NextResponse.json({
-                message: 'Unauthorized'
-            },{
-                status: 401
-            })
+                message: "Unauthorized"
+            },{status:401})
         }
+        
 
         const url = new URL(request.url);
         const pageParam = url.searchParams.get('page');
         const page = pageParam && !isNaN(Number(pageParam)) ? Number(pageParam) : 1;
         
-        const limit = 8;
+        const limit = 9;
         const skip = (page - 1) * limit;
         await dbConnection()
 
@@ -29,10 +28,14 @@ export const GET = async (request: NextRequest):Promise<NextResponse> =>{
                                             .populate({
                                                 path: 'api',
                                                 select: 'avatar title description updatedAt category',
-                                                populate: {
-                                                    path: 'category',
-                                                    select: 'name'
-                                                }
+                                                populate: [{
+                                                        path: 'category',
+                                                        select: 'name'
+                                                    },
+                                                    {
+                                                        path: "author",
+                                                        select: '_id username'
+                                                    }]
                                             });
         const total = await FavoriteApi.countDocuments({ user: session.user.id });
 

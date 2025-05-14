@@ -11,17 +11,18 @@ import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 
-function FavoriteApis({params}:{params:{username: string}}) {
+interface FavoriteApi {
+    _id: string,
+    api: SimplifiedApi
+}
+
+const FavoriteApis = ({params}:{params:{username: string}}) => {
 
     const { data: session, status } = useSession();
-    const [apis,setApis] = useState<SimplifiedApi[]>();
+    const [favoriteApis,setFavoriteApis] = useState<FavoriteApi[]>();
     const [loading,setLoading] = useState<boolean>(false);
     const [page,setPage] = useState<number>(1);
     const [totalPages,setTotalPages] = useState<number>(1);
-
-    if(!(session?.user.username === params.username)){
-        redirect('/unauthorized')
-    }
 
     const fetchUserFavoriteApis = async (currentPage: number) => {
         setLoading(true);
@@ -30,7 +31,7 @@ function FavoriteApis({params}:{params:{username: string}}) {
             console.log(response);
             
             if (response.status === 200) {
-                setApis(response.data.favoriteApis);
+                setFavoriteApis(response.data.favoriteApis);
                 setTotalPages(response.data.totalPages);
             } else {
                 toast.error('Operation failed',{
@@ -50,28 +51,34 @@ function FavoriteApis({params}:{params:{username: string}}) {
         fetchUserFavoriteApis(page);
     }, []);
 
-    if(status === 'loading' || loading) return <Loading />
+    if(status === 'loading') return <Loading />
 
+    if(status === 'authenticated' && session.user.username !== params.username){
+        redirect('/unauthorized')
+    }
+    
     return (
         <div>
-            <h1 className='text-xl font-semibold'>Favorite apis</h1>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
+            <h1 className='text-3xl font-semibold'>Favorite apis</h1>
+            <br />
+            <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3'>
                 {
-                    apis && apis.length ? (
-                        apis.map((api) =>(
-                            <ApiCard key={api._id} api={api}
-                            isOwner={session.user.id === api.author._id}/>
+                    !loading && favoriteApis && favoriteApis.length ? (
+                        favoriteApis.map((favoriteApi) =>(
+                            <ApiCard isOnFavoritePage={true} key={favoriteApi._id} api={favoriteApi.api}
+                            isOwner={session?.user.id === favoriteApi.api.author._id} favorite_id={favoriteApi._id}/>
                         ))
                     ) : "No favorite api's founded"
                 }
-                {
-                    apis && apis.length ? (
-                        <PaginationControls
-                            previous={() => handlePrevious({ page, setPage, getMore: fetchUserFavoriteApis})}
-                            next={() => handleNext({page,totalPages,setPage,getMore:fetchUserFavoriteApis})} />
-                    ) : null
-                }
             </div>
+            <br />
+            {
+                favoriteApis && favoriteApis.length ? (
+                    <PaginationControls
+                        previous={() => handlePrevious({ page, setPage, getMore: fetchUserFavoriteApis})}
+                        next={() => handleNext({page,totalPages,setPage,getMore:fetchUserFavoriteApis})} />
+                ) : null
+            }
         </div>
     )
 }
