@@ -3,10 +3,10 @@
 import ApiForm from '@/components/client/ApiForm'
 import React from 'react'
 
-const PublishApi = () => {
+const PublishApi = ({params}: {params: {username: string}}) => {
     return (
         <div>
-            <ApiForm type='publish' />
+            <ApiForm type='publish' username={params.username}/>
         </div>
     )
 }

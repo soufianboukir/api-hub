@@ -25,7 +25,10 @@ export const publishApi = async (formData: ApiForm) =>{
 
 export const updateApi = async (formData: ApiForm,apiId: string) =>{
     const response = await api.put(`/api/apiApp/apis/${apiId}`,formData)
-    console.log(response);
-    
+    return response;
+}
+
+export const isFavorite = async (apiId: string) =>{
+    const response = await api.get(`/api/favorites/isFavorite?apiId=${apiId}`);
     return response;
 }

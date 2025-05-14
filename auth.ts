@@ -18,7 +18,8 @@ type ReturnedUser = {
     email: string,
     username: string,
     bg_picture?: string,
-    profile_picture?: string
+    profile_picture?: string,
+    bio?: string,
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -60,7 +61,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     email: user.email,
                     username: user.username,
                     bg_picture: user.bg_picture,
-                    profile_picture: user.profile_picture
+                    profile_picture: user.profile_picture,
+                    bio: user.bio,
                 };
             },
         })

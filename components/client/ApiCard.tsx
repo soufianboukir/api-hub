@@ -1,21 +1,40 @@
 'use client'
 
 import Image from 'next/image'
-import React from 'react'
-import { Bolt, Heart } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Bolt, Heart, HeartOff } from 'lucide-react'
 import { SimplifiedApi } from '@/interfaces/api'
 import { formatDate } from '@/lib/formatDate'
 import Link from 'next/link'
+import { isFavorite } from '@/services/apis'
 
 interface ApiCardProps {
     api: SimplifiedApi,
     isOwner: boolean
 }
 
-
-
 export const ApiCard = ({api,isOwner} : ApiCardProps) => {
-    
+    const [isAlreadyFavorite,setIsAlreadyFavorite] = useState(false);
+    const [loading,setLoading] = useState(true);
+
+    useEffect(() =>{    
+        const checkIsApiAlreadyFavorite = async () =>{
+            try{
+                setLoading(true);
+                const response = await isFavorite(api._id);
+                if(response.status === 200){
+                    setIsAlreadyFavorite(true);
+                }
+            }catch{
+                //
+            }finally{
+                setLoading(false)
+            }
+        }
+        checkIsApiAlreadyFavorite();
+    },[])
+
+    if(loading) return null;
     return (
         <div className='px-5 py-3 shadow-sm border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 duration-100 bg-white dark:bg-gray-900'>
             <div className='flex items-center justify-between'>
@@ -29,7 +48,11 @@ export const ApiCard = ({api,isOwner} : ApiCardProps) => {
                         <Bolt className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
                         </Link>
                     )}
-                    <Heart className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
+                    {
+                        !isAlreadyFavorite ? (
+                            <Heart className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
+                        ) : <HeartOff className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300'/>
+                    }
                 </div>
             </div>
 

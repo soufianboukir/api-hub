@@ -22,6 +22,9 @@ import { toast } from 'sonner'
 import { ApiForm as ApiFormInterface } from '@/interfaces/api'
 import { publishApi, updateApi } from '@/services/apis'
 import { EndPoint } from '@/models/api.model'
+import { useSession } from 'next-auth/react'
+import { Loading } from '../Loading'
+import { redirect } from 'next/navigation'
 
 const avatars = [
     apiAvatar1,
@@ -38,6 +41,7 @@ const avatars = [
 
 type ApiFormProps = {
     type: 'publish' | 'edit',
+    username: string,
     apiId?: string,
     apiForm?: {
         avatar: StaticImageData,
@@ -54,8 +58,14 @@ type ApiFormProps = {
     },
 }
 
-const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {    
+
+
+const ApiForm = ({type,apiId,apiForm,username}:  ApiFormProps) => {    
     const [avatar, setAvatar] = useState(apiForm?.avatar || avatars[0])
+    const { data: session, status } = useSession();
+    if(!(session?.user.username === username)){
+        redirect('/unauthorized')
+    }
 
     const [formData, setFormData] = useState<ApiFormInterface>({
         avatar: apiForm?.avatar || avatar,
@@ -148,9 +158,13 @@ const ApiForm = ({type,apiId,apiForm}:  ApiFormProps) => {
                     break;
             }
         }catch{
-
+            toast.error('Error',{
+                description: 'Internal server error'
+            })
         }
     }
+
+    if(status === 'loading') return <Loading />
 
     return (
         <div className="max-w-6xl mx-auto p-6">

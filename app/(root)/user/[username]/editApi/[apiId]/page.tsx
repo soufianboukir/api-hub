@@ -22,7 +22,7 @@ async function page({params}: EditApiProps) {
     return (
         <div>
             <h1 className='text-3xl font-semibold'>
-                <ApiForm type='edit' apiForm={apiData} apiId={params.apiId}/>
+                <ApiForm type='edit' apiForm={apiData} apiId={params.apiId} username={params.username}/>
             </h1>
         </div>
     )

@@ -39,23 +39,23 @@ async function page({params}:UserProfilePageProps) {
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{data.user.username}</h1>
 
                 {isOwner && (
-                <div className="flex gap-3">
-                    <Link
-                    href="/user/settings"
-                    className="flex items-center gap-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition"
-                    >
-                    <SquarePen className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-                    <span className="text-sm text-gray-700 dark:text-gray-200 hidden sm:inline">Edit Profile</span>
-                    </Link>
+                    <div className="flex gap-3">
+                        <Link
+                        href="/user/settings"
+                        className="flex items-center gap-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition"
+                        >
+                        <SquarePen className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                        <span className="text-sm text-gray-700 dark:text-gray-200 hidden sm:inline">Edit Profile</span>
+                        </Link>
 
-                    <Link
-                    href={`/user/${username}/publishApi`}
-                    className="flex items-center gap-1 px-3 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-md transition"
-                    >
-                    <SquarePlus className="w-5 h-5 text-blue-700 dark:text-blue-300" />
-                    <span className="text-sm text-blue-700 dark:text-blue-300 hidden sm:inline">Publish API</span>
-                    </Link>
-                </div>
+                        <Link
+                        href={`/user/${username}/publishApi`}
+                        className="flex items-center gap-1 px-3 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-md transition"
+                        >
+                        <SquarePlus className="w-5 h-5 text-blue-700 dark:text-blue-300" />
+                        <span className="text-sm text-blue-700 dark:text-blue-300 hidden sm:inline">Publish API</span>
+                        </Link>
+                    </div>
                 )}
             </div>
 

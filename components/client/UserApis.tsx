@@ -63,14 +63,14 @@ const UserApis = ({username,isOwner} : {username: string, isOwner: boolean}) => 
                         apis.map((api) => (
                             <ApiCard key={api._id} api={api} isOwner={isOwner}/>
                         ))
-                    :null
+                    : "No api's published by this user"
                 }
             </div>
             <br />
             {
-                apis && apis.length && (
+                apis && apis.length ? (
                     <PaginationControls previous={handlePrevious} next={handleNext}/>
-                )
+                ) : null
             }
         </div>
     )
