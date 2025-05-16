@@ -1,5 +1,6 @@
 import mongoose, { type Document, models, type ObjectId, Schema } from "mongoose";
 import { type StaticImageData } from "next/image";
+import { UserI } from "./user.model";
 
 export type EndPoint = {
     url: string,
@@ -8,7 +9,7 @@ export type EndPoint = {
 }
 
 export type Review = {
-    author: string,
+    author: UserI,
     review: string,
 }
 

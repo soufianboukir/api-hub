@@ -1,61 +1,18 @@
-import { Button } from '@/components/ui/button';
+import { EndPoint, Review } from '@/models/api.model';
 import { fetchApi } from '@/services/apis'
-import { BringToFront, ExternalLink, Link, Star } from 'lucide-react';
+import { BringToFront, ExternalLink, Link as LinkLucide, Star } from 'lucide-react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react'
+import { ReviewApi } from '@/components/ReviewApi';
 
 
 async function page({params}: {params: {apiId: string}}) {
-    const api = {
-        avatar: 'https://api.logo.com/example.png',
-        title: 'Currency Conversion API',
-        author: { username: 'soufian_dev' },
-        category: { name: 'Finance' },
-        description: 'Easily convert between 160+ currencies in real-time using this powerful RESTful API.',
-        baseUrl: 'https://api.currencyconverter.dev/v1',
-        documentationUrl: 'https://docs.currencyconverter.dev',
-        githubLink: 'https://github.com/example/currency-api',
-        gitLabLink: 'https://github.com/example/currency-api',
-        endPoints: [
-          {
-            method: 'GET',
-            url: '/convert',
-            description: 'Converts amount between two currencies using the latest exchange rate.',
-          },
-          {
-            method: 'POST',
-            url: '/rates',
-            description: 'Returns the latest exchange rates for all supported currencies.',
-          },
-          {
-            method: 'DELETE',
-            url: '/deleteItem/:id',
-            description: 'Returns the latest exchange rates for all supported currencies.',
-          },
-        ],
-        reviews: [
-          {
-            author: 'user123',
-            review: 'Simple to use and highly accurate. Recommended for fintech apps!',
-          },
-          {
-            author: 'user123',
-            review: 'Simple to use and highly accurate. Recommended for fintech apps!',
-          },
-          {
-            author: 'user123',
-            review: 'Simple to use and highly accurate. Recommended for fintech apps!',
-          },
-          {
-            author: 'apiFan',
-            review: 'The documentation is clean, and the response time is fast.',
-          },
-        ],
-      };
 
       const apiData = await fetchApi(params.apiId);
-      if(!apiData){
+      
+      if(!apiData || apiData.error){
         return notFound();
       }
     
@@ -67,34 +24,34 @@ async function page({params}: {params: {apiId: string}}) {
               alt="API Logo"
               width={100}
               height={100}
-              className="w-24 h-24 rounded-xl shadow-md border-2 border-white"
+              className="w-24 h-24 rounded-xl shadow-md border-2 dark:border-gray-600 border-white"
             />
             <div>
-              <h1 className="text-3xl font-bold light:text-gray-800">{api.title}</h1>
+              <h1 className="text-3xl font-bold light:text-gray-800">{apiData.title}</h1>
               <div className="flex items-center gap-3 mt-2">
                 <span className="text-gray-500">by 
-                  <span className="text-indigo-600 dark:text-blue-500 font-medium ml-1">{api.author.username}</span>
+                  <Link className="text-indigo-600 dark:text-blue-500 font-medium ml-1" href={`/user/${apiData.author.username}`}>{apiData.author.username}</Link>
                 </span>
                 <span className="text-gray-300">•</span>
                 <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm rounded-full">
-                  {api.category.name}
+                  {apiData.category.name}
                 </span>
               </div>
             </div>
           </div>
     
           <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
-            <p className="text-lg light:text-gray-700 leading-relaxed">{api.description}</p>
+            <p className="text-lg light:text-gray-700 leading-relaxed">{apiData.description}</p>
           </div>
     
-          {api.baseUrl && (
+          {apiData.baseUrl && (
             <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
               <h2 className="text-xl font-semibold light:text-gray-800 mb-3 flex items-center gap-2">
-                <Link className='w-6 h-6'/>
+                <LinkLucide className='w-6 h-6'/>
                 Base URL
               </h2>
               <code className="block light:bg-gray-100 light:text-blue-700 dark:text-blue-500 px-4 py-3 rounded-lg border dark:border-gray-500 border-gray-200 mt-1 font-mono text-sm overflow-x-auto">
-                {api.baseUrl}
+                {apiData.baseUrl}
               </code>
             </div>
           )}
@@ -105,7 +62,7 @@ async function page({params}: {params: {apiId: string}}) {
               Endpoints
             </h2>
             <ul className="space-y-3">
-              {api.endPoints.map((ep, index) => (
+              {apiData.endPoints.map((ep: EndPoint, index:number) => (
                 <li
                   key={index}
                   className="border dark:border-gray-700 p-5 rounded-lg bg-gray-50 border-gray-100 dark:bg-inherit hover:bg-white transition-all duration-200 hover:shadow-sm group"
@@ -135,9 +92,9 @@ async function page({params}: {params: {apiId: string}}) {
               Resources
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {api.documentationUrl && (
+              {apiData.documentationUrl && (
                 <a
-                  href={api.documentationUrl}
+                  href={apiData.documentationUrl}
                   className="flex items-center gap-3 p-4 bg-indigo-50 dark:bg-gray-800 text-blue-500 light:text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors duration-200"
                   target="_blank"
                 >
@@ -147,9 +104,9 @@ async function page({params}: {params: {apiId: string}}) {
                   <span className="font-medium">Documentation</span>
                 </a>
               )}
-              {api.githubLink && (
+              {apiData.githubLink && (
                 <a
-                  href={api.githubLink}
+                  href={apiData.githubLink}
                   className="flex items-center gap-3 p-4 bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800 rounded-lg hover:bg-gray-200 transition-colors duration-200"
                   target="_blank"
                 >
@@ -159,9 +116,9 @@ async function page({params}: {params: {apiId: string}}) {
                   <span className="font-medium">GitHub Repository</span>
                 </a>
               )}
-              {api.gitLabLink && (
+              {apiData.gitLabLink && (
                 <a
-                  href={api.gitLabLink}
+                  href={apiData.gitLabLink}
                   className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-700 dark:text-white text-orange-700 rounded-lg hover:bg-orange-100 transition-colors duration-200"
                   target="_blank"
                 >
@@ -180,28 +137,30 @@ async function page({params}: {params: {apiId: string}}) {
               User Reviews
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {api.reviews.map((review, index) => (
-                <div
-                  key={index}
-                  className="light:bg-white dark:border-gray-700 p-5 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow duration-200"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
-                      {review.author.charAt(0).toUpperCase()}
+              {
+                apiData.reviews.length ? 
+                  apiData.reviews.map((review:Review, index:number) => (
+                    <div
+                      key={index}
+                      className="light:bg-white dark:border-gray-700 p-5 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow duration-200"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                          {review.author.username.charAt(0).toUpperCase()}
+                        </div>
+                        <p className="font-semibold dark:text-gray-200 text-gray-800">{review.author.username}</p>
+                      </div>
+                      <p className="dark:text-gray-500 mt-3 pl-2 border-l-2 border-indigo-200 italic">
+                        {review.review}
+                      </p>
                     </div>
-                    <p className="font-semibold dark:text-gray-200 text-gray-800">{review.author}</p>
-                  </div>
-                  <p className="dark:text-gray-500 mt-3 pl-2 border-l-2 border-indigo-200 italic">
-                    "{review.review}"
-                  </p>
-                </div>
-              ))}
+                  ))
+                : "be the first one to comment on this api!"
+              }
             </div>
             <br />
-            <div className='w-[20%] mx-auto'>
-              <Button className='w-[100%]'>
-                Submit a review
-              </Button>
+            <div className="lg:w-[20%] w-[60%] mx-auto">
+              <ReviewApi apiId={params.apiId}/>
             </div>
           </div>
         </div>

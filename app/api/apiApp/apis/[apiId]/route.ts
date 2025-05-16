@@ -20,6 +20,13 @@ export const GET = async (request: NextRequest, { params }: {params: {apiId: str
         const api = await Api.findById(apiId)
                             .populate('author')
                             .populate('category')
+                            .populate({
+                                path: 'reviews',
+                                populate: {
+                                  path: 'author',
+                                  model: 'User'
+                                }
+                              });
         
         if(api){
             return NextResponse.json({

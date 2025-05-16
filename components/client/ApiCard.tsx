@@ -67,8 +67,10 @@ export const ApiCard = ({api,isOwner,isOnFavoritePage,favorite_id} : ApiCardProp
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {api.title.length > 30 ? `${api.title.substring(0, 30)}...` : api.title}
+                    <h1 className="text-lg font-semibold text-gray-900 dark:text-white hover:underline hover:text-blue-600 duration-200">
+                        <Link href={`/api/${api._id}`}>
+                            {api.title.length > 30 ? `${api.title.substring(0, 30)}...` : api.title}
+                        </Link>
                     </h1>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         {api.description.length > 60 ? `${api.description.substring(0, 60)}...` : api.description}
