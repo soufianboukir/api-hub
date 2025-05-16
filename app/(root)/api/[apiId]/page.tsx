@@ -1,4 +1,8 @@
+import { Button } from '@/components/ui/button';
 import { fetchApi } from '@/services/apis'
+import { BringToFront, ExternalLink, Link, Star } from 'lucide-react';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import React from 'react'
 
 
@@ -12,7 +16,7 @@ async function page({params}: {params: {apiId: string}}) {
         baseUrl: 'https://api.currencyconverter.dev/v1',
         documentationUrl: 'https://docs.currencyconverter.dev',
         githubLink: 'https://github.com/example/currency-api',
-        gitLabLink: '',
+        gitLabLink: 'https://github.com/example/currency-api',
         endPoints: [
           {
             method: 'GET',
@@ -20,12 +24,25 @@ async function page({params}: {params: {apiId: string}}) {
             description: 'Converts amount between two currencies using the latest exchange rate.',
           },
           {
-            method: 'GET',
+            method: 'POST',
             url: '/rates',
+            description: 'Returns the latest exchange rates for all supported currencies.',
+          },
+          {
+            method: 'DELETE',
+            url: '/deleteItem/:id',
             description: 'Returns the latest exchange rates for all supported currencies.',
           },
         ],
         reviews: [
+          {
+            author: 'user123',
+            review: 'Simple to use and highly accurate. Recommended for fintech apps!',
+          },
+          {
+            author: 'user123',
+            review: 'Simple to use and highly accurate. Recommended for fintech apps!',
+          },
           {
             author: 'user123',
             review: 'Simple to use and highly accurate. Recommended for fintech apps!',
@@ -36,21 +53,27 @@ async function page({params}: {params: {apiId: string}}) {
           },
         ],
       };
+
+      const apiData = await fetchApi(params.apiId);
+      if(!apiData){
+        return notFound();
+      }
     
       return (
-        <div className="max-w-5xl mx-auto p-6 space-y-8 font-sans bg-gray-50 min-h-screen">
-          {/* Header */}
-          <div className="flex items-center gap-6 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <img
-              src={api.avatar}
+        <div className="max-w-5xl mx-auto p-6 space-y-8 font-sans light:bg-gray-50 min-h-screen">
+          <div className="flex items-center gap-6 p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
+            <Image
+              src={apiData.avatar}
               alt="API Logo"
+              width={100}
+              height={100}
               className="w-24 h-24 rounded-xl shadow-md border-2 border-white"
             />
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">{api.title}</h1>
+              <h1 className="text-3xl font-bold light:text-gray-800">{api.title}</h1>
               <div className="flex items-center gap-3 mt-2">
                 <span className="text-gray-500">by 
-                  <span className="text-indigo-600 font-medium ml-1">{api.author.username}</span>
+                  <span className="text-indigo-600 dark:text-blue-500 font-medium ml-1">{api.author.username}</span>
                 </span>
                 <span className="text-gray-300">•</span>
                 <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm rounded-full">
@@ -60,39 +83,32 @@ async function page({params}: {params: {apiId: string}}) {
             </div>
           </div>
     
-          {/* Description */}
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <p className="text-lg text-gray-700 leading-relaxed">{api.description}</p>
+          <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
+            <p className="text-lg light:text-gray-700 leading-relaxed">{api.description}</p>
           </div>
     
-          {/* Base URL */}
           {api.baseUrl && (
-            <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
+            <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
+              <h2 className="text-xl font-semibold light:text-gray-800 mb-3 flex items-center gap-2">
+                <Link className='w-6 h-6'/>
                 Base URL
               </h2>
-              <code className="block bg-gray-100 text-blue-700 px-4 py-3 rounded-lg border border-gray-200 mt-1 font-mono text-sm overflow-x-auto">
+              <code className="block light:bg-gray-100 light:text-blue-700 dark:text-blue-500 px-4 py-3 rounded-lg border dark:border-gray-500 border-gray-200 mt-1 font-mono text-sm overflow-x-auto">
                 {api.baseUrl}
               </code>
             </div>
           )}
     
-          {/* Endpoints */}
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-              </svg>
+          <div className="p-6 dark:border-gray-500 light:bg-white rounded-xl shadow-sm border border-gray-100">
+            <h2 className="text-xl font-semibold light:text-gray-800 mb-4 flex items-center gap-2">
+              <BringToFront className='w-6 h-6'/>
               Endpoints
             </h2>
             <ul className="space-y-3">
               {api.endPoints.map((ep, index) => (
                 <li
                   key={index}
-                  className="border p-5 rounded-lg bg-gray-50 hover:bg-white transition-all duration-200 hover:shadow-sm group"
+                  className="border dark:border-gray-700 p-5 rounded-lg bg-gray-50 border-gray-100 dark:bg-inherit hover:bg-white transition-all duration-200 hover:shadow-sm group"
                 >
                   <div className="flex items-start gap-4">
                     <span className={`px-3 py-1 rounded-md text-xs font-bold ${
@@ -104,8 +120,8 @@ async function page({params}: {params: {apiId: string}}) {
                       {ep.method}
                     </span>
                     <div>
-                      <p className="font-mono text-blue-600 group-hover:text-blue-700">{ep.url}</p>
-                      <p className="text-gray-600 text-sm mt-1.5">{ep.description}</p>
+                      <p className="font-mono dark:text-blue-400 text-blue-600 group-hover:text-blue-700">{ep.url}</p>
+                      <p className="text-gray-600 dark:text-gray-200 text-sm mt-1.5">{ep.description}</p>
                     </div>
                   </div>
                 </li>
@@ -113,19 +129,16 @@ async function page({params}: {params: {apiId: string}}) {
             </ul>
           </div>
     
-          {/* Links */}
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+          <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
+            <h2 className="text-xl font-semibold light:text-gray-800 mb-4 flex items-center gap-2">
+              <ExternalLink className='w-6 h-6'/>
               Resources
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {api.documentationUrl && (
                 <a
                   href={api.documentationUrl}
-                  className="flex items-center gap-3 p-4 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors duration-200"
+                  className="flex items-center gap-3 p-4 bg-indigo-50 dark:bg-gray-800 text-blue-500 light:text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors duration-200"
                   target="_blank"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +150,7 @@ async function page({params}: {params: {apiId: string}}) {
               {api.githubLink && (
                 <a
                   href={api.githubLink}
-                  className="flex items-center gap-3 p-4 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                  className="flex items-center gap-3 p-4 bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800 rounded-lg hover:bg-gray-200 transition-colors duration-200"
                   target="_blank"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -149,7 +162,7 @@ async function page({params}: {params: {apiId: string}}) {
               {api.gitLabLink && (
                 <a
                   href={api.gitLabLink}
-                  className="flex items-center gap-3 p-4 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition-colors duration-200"
+                  className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-700 dark:text-white text-orange-700 rounded-lg hover:bg-orange-100 transition-colors duration-200"
                   target="_blank"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -161,31 +174,34 @@ async function page({params}: {params: {apiId: string}}) {
             </div>
           </div>
     
-          {/* Reviews */}
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-              </svg>
+          <div className="p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
+            <h2 className="text-xl font-semibold dark:text-white text-gray-800 mb-4 flex items-center gap-2">
+              <Star className='w-6 h-6'/>
               User Reviews
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {api.reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow duration-200"
+                  className="light:bg-white dark:border-gray-700 p-5 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow duration-200"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
                       {review.author.charAt(0).toUpperCase()}
                     </div>
-                    <p className="font-semibold text-gray-800">{review.author}</p>
+                    <p className="font-semibold dark:text-gray-200 text-gray-800">{review.author}</p>
                   </div>
-                  <p className="text-gray-600 mt-3 pl-2 border-l-2 border-indigo-200 italic">
+                  <p className="dark:text-gray-500 mt-3 pl-2 border-l-2 border-indigo-200 italic">
                     "{review.review}"
                   </p>
                 </div>
               ))}
+            </div>
+            <br />
+            <div className='w-[20%] mx-auto'>
+              <Button className='w-[100%]'>
+                Submit a review
+              </Button>
             </div>
           </div>
         </div>

@@ -14,8 +14,15 @@ export const fetchUserApis = async (username: string, page: number) =>{
 }
 
 export const fetchApi = async (apiId: string) =>{
-    const response = await api.get(`/api/apiApp/apis/${apiId}`);
-    return response.data.api;
+    try{
+        const response = await api.get(`/api/apiApp/apis/${apiId}`);
+        return response.data.api;
+    }catch(error){
+        if (error.response) {
+            return error.response.data;
+        }
+        throw error
+    }
 }
 
 export const publishApi = async (formData: ApiForm) =>{
