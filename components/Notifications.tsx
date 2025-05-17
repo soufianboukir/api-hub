@@ -11,10 +11,10 @@ import { Notification } from "@/interfaces/notification";
 import moment from 'moment'
 import Image from "next/image";
 import Link from "next/link";
+import { markNotReaded } from "@/functions";
 
 export default function Notifications() {
     const [notifications,setNotifications] = useState<Notification[]>([]);
-    const [loading,setLoading] = useState(true);
 
     useEffect(() =>{
         const fetchNotifications = async () =>{
@@ -27,12 +27,11 @@ export default function Notifications() {
                 toast.error('Operation failed', {
                     description: 'Internal server error'
                 })
-            }finally{
-                setLoading(false)
             }
         }
         fetchNotifications();
     },[])
+
   return (
     <Popover>
         <PopoverTrigger asChild>
@@ -54,13 +53,13 @@ export default function Notifications() {
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 p-4 rounded-t-xl border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between">
                     <h4 className="text-sm font-semibold">Notifications</h4>
-                    <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline" onClick={markNotReaded}>
                         Mark all as read
                     </span>
                 </div>
             </div>
             <div className="max-h-96 overflow-y-auto">
-                {notifications.map((notification, idx) => (
+                {notifications && notifications.map((notification, idx) => (
                     <Link
                         href={notification.url}
                         key={idx}

@@ -1,3 +1,6 @@
+import { markNotifcationsRead } from "@/services/notifications";
+import { toast } from "sonner";
+
 interface PaginationFunctionsParametres{
     page: number,
     totalPages?: number,
@@ -18,3 +21,11 @@ export const handlePrevious = ({page,setPage,getMore}:PaginationFunctionsParamet
         getMore(page - 1);
     }
 }   
+
+export const markNotReaded = () =>{
+    toast.promise(markNotifcationsRead(),{
+        loading: 'Loading...',
+        success: (res) => res.data.message,
+        error: (err) => err.response.data.message
+    })
+} 

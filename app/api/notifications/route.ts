@@ -45,7 +45,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }
 };
 
-export async function PATCH():Promise<NextRespons> {
+export async function PATCH():Promise<NextResponse> {
     try{
         const session = await auth();
 
