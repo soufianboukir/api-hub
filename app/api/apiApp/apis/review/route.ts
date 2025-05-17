@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import Api from "@/models/api.model";
+import Notification from "@/models/notification.model";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest): Promise<NextResponse> =>{
@@ -20,6 +21,15 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
                 message: "Api not found"
             },{
                 status:404
+            })
+        }
+
+        if(api.author.toString() !== session.user.id){
+            await Notification.create({
+                message: "Reviewed your api",
+                url: `/api/${api._id}`,
+                fromUser: session.user.id,
+                toUser: api.author,
             })
         }
 

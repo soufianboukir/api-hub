@@ -5,43 +5,46 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-
-const notifications = [
-  {
-    title: "API Purchased",
-    message: "JohnDoe bought your Weather API.",
-    time: "2 mins ago",
-    read: false
-  },
-  {
-    title: "New Review",
-    message: "Your Currency API got a 5-star rating!",
-    time: "10 mins ago",
-    read: false
-  },
-  {
-    title: "Usage Alert",
-    message: "You're at 90% of your API limit.",
-    time: "1 hour ago",
-    read: true
-  },
-];
+import { getNotifications } from "@/services/notifications";
+import { toast } from "sonner";
+import { Notification } from "@/interfaces/notification";
+import moment from 'moment'
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Notifications() {
-    const [notifications,setNotifications] = useState([]);
+    const [notifications,setNotifications] = useState<Notification[]>([]);
     const [loading,setLoading] = useState(true);
 
     useEffect(() =>{
-        const fetchNotifications = () =>{
-            
-        } 
+        const fetchNotifications = async () =>{
+            try{        
+                const response = await getNotifications(2);
+                if(response.data.notifications){
+                    setNotifications(response.data.notifications)
+                }
+            }catch{ 
+                toast.error('Operation failed', {
+                    description: 'Internal server error'
+                })
+            }finally{
+                setLoading(false)
+            }
+        }
+        fetchNotifications();
     },[])
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative rounded-full">
-            <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            <Button variant="ghost" size={'icon'} className="relative cursor-pointer rounded-full">
+                <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                {
+                    notifications.some((notification) => !notification.isRead) ?
+                        <div>
+                            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                        </div>
+                    :null
+                }
             </Button>
         </PopoverTrigger>
         <PopoverContent 
@@ -49,43 +52,79 @@ export default function Notifications() {
             align="end"
         >
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 p-4 rounded-t-xl border-b border-gray-100 dark:border-gray-800">
-            <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold">Notifications</h4>
-                <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
-                    Mark all as read
-                </span>
-            </div>
+                <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold">Notifications</h4>
+                    <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
+                        Mark all as read
+                    </span>
+                </div>
             </div>
             <div className="max-h-96 overflow-y-auto">
-            {notifications.map((notif, idx) => (
-                <div
-                key={idx}
-                className={cn(
-                    "p-4 border-b border-gray-100 dark:border-gray-800 transition-all",
-                    "hover:bg-gray-50 dark:hover:bg-gray-800/50",
-                    "flex gap-3 items-start",
-                    !notif.read && "bg-blue-50/50 dark:bg-blue-900/10"
-                )}
-                >
-                    <div className="flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    </div>
-                    <div className="flex-1">
+                {notifications.map((notification, idx) => (
+                    <Link
+                        href={notification.url}
+                        key={idx}
+                        className={cn(
+                        "p-4 border-b cursor-pointer border-gray-200 dark:border-gray-800 transition-all duration-300",
+                        "hover:bg-gray-50 dark:hover:bg-gray-800/50",
+                        "flex items-start gap-4",
+                        !notification.isRead && "bg-blue-50/50 dark:bg-blue-900/10"
+                        )}
+                    >
+                        <div className="flex-shrink-0">
+                            {
+                                notification.fromUser.profile_picture ? (
+                                    <Image
+                                        src={notification.fromUser.profile_picture}
+                                        alt="User profile"
+                                        width={100}
+                                        height={100}
+                                        className="w-10 h-10 rounded-full object-cover"
+                                    />
+                                ) : <div className={`w-10 h-10 flex justify-center items-center rounded-full ${notification.fromUser.defaultColor}`}>
+                                        {
+                                            notification.fromUser.username.charAt(0)
+                                        }
+                                    </div>
+                            }
+                        </div>
+
+                        <div className="flex-1">
                         <div className="flex justify-between items-start">
-                            <h5 className="text-sm font-semibold">{notif.title}</h5>
-                            {notif.read && (
-                                <Check className="w-3 h-3 text-green-500" />
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                                    {notification.fromUser.username || "Unknown User"}
+                                </h4>
+
+                                <p className="text-sm text-gray-600 dark:text-gray-300 mt-0.5">
+                                    {notification.message}
+                                </p>
+                            </div>
+
+                            {notification.isRead && (
+                                <Check className="w-4 h-4 text-green-500 mt-1" />
                             )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">{notif.message}</p>
-                        <span className="text-xs text-gray-400 mt-2 block">{notif.time}</span>
-                    </div>
-                </div>
-            ))}
+
+                        <span className="text-xs text-gray-400 dark:text-gray-500 mt-2 block">
+                            {moment(notification.createdAt).fromNow()}
+                        </span>
+                        </div>
+
+                        {!notification.isRead && (
+                        <div className="mt-1">
+                            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse block"></span>
+                        </div>
+                        )}
+                    </Link>
+                ))}
+
             </div>
             <div className="p-3 text-center bg-gray-50 dark:bg-gray-900/50 rounded-b-xl">
                 <span className="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline">
-                    View all notifications
+                    <Link href={'/notifications'}>
+                        View all notifications
+                    </Link>
                 </span>
             </div>
         </PopoverContent>
