@@ -19,7 +19,7 @@ export default function Notifications() {
     useEffect(() =>{
         const fetchNotifications = async () =>{
             try{        
-                const response = await getNotifications(2);
+                const response = await getNotifications(3);
                 if(response.data.notifications){
                     setNotifications(response.data.notifications)
                 }
