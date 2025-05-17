@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Avatar } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Icons } from '@/components/ui/icons';
 import { formatDistanceToNow } from 'date-fns';
+import { MoreVertical, Search, Send } from 'lucide-react';
+import { getConversations } from '@/services/conversations';
 
 const testConversations = [
   {
@@ -84,6 +85,22 @@ const testConversations = [
 export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState(testConversations[0]);
   const [newMessage, setNewMessage] = useState('');
+  const [conversations,setConversations] = useState([]);
+  const [loading,setLoading] = useState(true);
+
+  const fetchConversations = async () =>{
+    try{
+      const response = await getConversations();
+      console.log(response)
+      if(response.status === 200){
+        setConversations(response.data.conversations)
+      }
+    }catch{
+
+    }finally{
+      setLoading(false)
+    }
+  }
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -95,48 +112,47 @@ export default function MessagesPage() {
             sender: 'Me',
             content: newMessage,
             createdAt: new Date(),
-          }
+          },
         ],
         lastMessage: newMessage,
         updatedAt: new Date(),
       };
-      
-      // Update the conversation in the list
-      const updatedConversations = testConversations.map(conv => 
-        conv.id === updatedConversation.id ? updatedConversation : conv
-      );
-      
+
       setSelectedConversation(updatedConversation);
       setNewMessage('');
     }
   };
 
+  useEffect(() =>{
+    fetchConversations();
+  },[])
+
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-      {/* Conversations List */}
+    <div className="flex h-[85vh] bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
       <div className="w-1/3 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-bold">Messages</h2>
+        <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+          <h2 className="text-2xl font-bold">Messages</h2>
           <div className="relative mt-4">
-            <Icons.search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search conversations..."
-              className="pl-10 bg-gray-100 dark:bg-gray-800 border-none"
+              className="pl-10 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-blue-500 transition"
             />
           </div>
         </div>
-        
-        <div className="flex-1 overflow-y-auto">
+
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
           {testConversations.map((conv) => (
             <div
               key={conv.id}
               className={cn(
-                'flex items-center p-4 gap-3 cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50',
-                conv.id === selectedConversation.id && 'bg-blue-50 dark:bg-blue-900/20 border-r-2 border-blue-500'
+                'flex items-center p-4 gap-3 cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20',
+                conv.id === selectedConversation.id &&
+                  'bg-blue-100/30 dark:bg-blue-800/30 border-l-4 border-blue-500'
               )}
               onClick={() => setSelectedConversation(conv)}
             >
-              <Avatar className="w-12 h-12">
+              <Avatar className="w-12 h-12 shadow-md ring-2 ring-blue-300 dark:ring-blue-600">
                 <img src={conv.avatar} alt={conv.username} className="rounded-full" />
               </Avatar>
               <div className="flex-1 min-w-0">
@@ -147,11 +163,9 @@ export default function MessagesPage() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                    {conv.lastMessage}
-                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{conv.lastMessage}</p>
                   {conv.unread > 0 && (
-                    <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="bg-blue-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center shadow">
                       {conv.unread}
                     </span>
                   )}
@@ -162,54 +176,52 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      {/* Messages Panel */}
-      <div className="w-2/3 flex flex-col bg-gray-50 dark:bg-gray-950">
+      {/* Chat Window */}
+      <div className="w-2/3 flex flex-col">
         {selectedConversation && (
           <>
-            <div className="flex items-center border-b border-gray-200 dark:border-gray-800 p-4 gap-3 bg-white dark:bg-gray-900">
+            <div className="flex items-center border-b border-gray-200 dark:border-gray-800 p-4 gap-3 bg-white dark:bg-gray-900 shadow-sm">
               <Avatar className="w-10 h-10">
-                <img 
-                  src={selectedConversation.avatar} 
-                  alt={selectedConversation.username} 
-                  className="rounded-full" 
-                />
+                <img src={selectedConversation.avatar} alt={selectedConversation.username} className="rounded-full" />
               </Avatar>
               <div className="flex-1">
-                <div className="font-semibold">{selectedConversation.username}</div>
+                <div className="font-semibold text-lg">{selectedConversation.username}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   Last active {formatDistanceToNow(selectedConversation.updatedAt, { addSuffix: true })}
                 </div>
               </div>
-              <Button variant="ghost" size="icon">
-                <Icons.moreVertical className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                <MoreVertical className="h-5 w-5" />
               </Button>
             </div>
 
-            <div 
-              className="flex-1 overflow-y-auto p-6 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] 
-              dark:bg-[url('https://www.transparenttextures.com/patterns/dark-cubes.png')] bg-opacity-5"
+            <div
+              className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50 dark:bg-gray-950 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] 
+              dark:bg-[url('https://www.transparenttextures.com/patterns/dark-cubes.png')] bg-opacity-5 custom-scrollbar"
             >
               {selectedConversation.messages.map((msg, idx) => (
                 <div
                   key={idx}
                   className={cn(
-                    'flex max-w-3/4 transition-all duration-200',
+                    'flex transition-all duration-200',
                     msg.sender === 'Me' ? 'justify-end' : 'justify-start'
                   )}
                 >
                   <div
                     className={cn(
-                      'p-4 rounded-2xl shadow-sm transition-all duration-200',
+                      'max-w-sm p-4 rounded-2xl shadow transition-all duration-200',
                       msg.sender === 'Me'
-                        ? 'bg-blue-500 text-white rounded-tr-none'
-                        : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-tl-none shadow'
+                        ? 'bg-blue-600 text-white rounded-tr-none'
+                        : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tl-none'
                     )}
                   >
-                    <p>{msg.content}</p>
-                    <div className={cn(
-                      "text-xs mt-1 opacity-70",
-                      msg.sender === 'Me' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
-                    )}>
+                    <p className="leading-relaxed">{msg.content}</p>
+                    <div
+                      className={cn(
+                        'text-xs mt-2 opacity-70',
+                        msg.sender === 'Me' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                      )}
+                    >
                       {formatDistanceToNow(msg.createdAt, { addSuffix: true })}
                     </div>
                   </div>
@@ -218,26 +230,20 @@ export default function MessagesPage() {
             </div>
 
             <div className="border-t border-gray-200 dark:border-gray-800 p-4 bg-white dark:bg-gray-900">
-              <div className="flex gap-2 items-center">
-                <Button variant="ghost" size="icon">
-                  <Icons.plus className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Icons.image className="h-5 w-5" />
-                </Button>
+              <div className="flex gap-3 items-center">
                 <Input
                   placeholder="Type your message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                  className="flex-1 rounded-full bg-gray-100 dark:bg-gray-800 border-none"
+                  className="flex-1 rounded-full bg-gray-100 dark:bg-gray-800 border-none px-4 py-2 focus:ring-2 focus:ring-blue-500 transition"
                 />
-                <Button 
-                  onClick={sendMessage} 
-                  className="rounded-full bg-blue-500 hover:bg-blue-600 text-white"
+                <Button
+                  onClick={sendMessage}
+                  className="rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition disabled:opacity-50"
                   disabled={!newMessage.trim()}
                 >
-                  <Icons.send className="h-5 w-5" />
+                  <Send className="h-5 w-5" />
                 </Button>
               </div>
             </div>

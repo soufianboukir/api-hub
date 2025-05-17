@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react'
 import { ReviewApi } from '@/components/ReviewApi';
+import { AskAvailabilityButton } from '@/components/client/AskAvailabilityButton';
+import { auth } from '@/auth';
 
 
 async function page({params}: {params: {apiId: string}}) {
@@ -15,7 +17,9 @@ async function page({params}: {params: {apiId: string}}) {
       if(!apiData || apiData.error){
         return notFound();
       }
-    
+      const session = await auth();
+      console.log(apiData.author._id);
+      
       return (
         <div className="max-w-5xl mx-auto p-6 space-y-8 font-sans light:bg-gray-50 min-h-screen">
           <div className="flex items-center gap-6 p-6 light:bg-white rounded-xl shadow-sm border dark:border-gray-500 border-gray-100">
@@ -159,8 +163,13 @@ async function page({params}: {params: {apiId: string}}) {
               }
             </div>
             <br />
-            <div className="lg:w-[20%] w-[60%] mx-auto">
+            <div className="flex justify-center gap-2">
               <ReviewApi apiId={params.apiId}/>
+              {
+                session?.user.id !== apiData.author._id && (
+                  <AskAvailabilityButton apiId={params.apiId}/>
+                )
+              }
             </div>
           </div>
         </div>

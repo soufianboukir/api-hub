@@ -35,7 +35,7 @@ export function ReviewApi({apiId}: {apiId: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-[100%]">Review this API</Button>
+        <Button variant="outline">Review this API</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
