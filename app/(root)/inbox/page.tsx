@@ -29,6 +29,7 @@ export default function ConversationsPage() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const conversationsToShow = query ? filteredConversations : conversations;
     const {data: session, status} = useSession();
+    const selectedConversationRef = useRef<Conversation | null>(null);
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,6 +40,7 @@ export default function ConversationsPage() {
       const newMsg: Message = {
         _id: String(Date.now()),
         text: newMessage,
+        conversationId: selectedConversation?._id,
         sender: { _id: session?.user.id },
         createdAt: new Date(),
       };
@@ -132,13 +134,33 @@ export default function ConversationsPage() {
 
     useEffect(() =>{
         setOtherParticipant(selectedConversation?.participants.find((p) => p._id !== session?.user?.id))
-    },[selectedConversation,session?.user.id])
-
+    },[selectedConversation,session?.user.id])    
 
     useEffect(() => {
-      socket.on("new_message", (message) => {
-        setMessages((prev) => [...prev, message]);
-      });
+      selectedConversationRef.current = selectedConversation;
+    }, [selectedConversation]);
+  
+    useEffect(() => {
+      
+      const handler = (message: Message) => {
+        if (selectedConversationRef.current?._id === message.conversationId) {
+          setMessages((prev) => [...prev, message])
+        }
+    
+        setConversations((prevConversations) => {
+          const index = prevConversations.findIndex(c => c._id === message.conversationId);
+          if (index === -1) return prevConversations;
+    
+          const updated = [...prevConversations];
+          const target = updated.splice(index, 1)[0];
+          target.lastMessage = message.text;
+          target.updatedAt = new Date().toISOString();
+    
+          return [target, ...updated];
+        });
+      };
+    
+      socket.on("new_message", handler);
 
       return () => {
         socket.off("new_message");

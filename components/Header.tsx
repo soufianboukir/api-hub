@@ -3,7 +3,7 @@ import appLogo from '@/public/apihub-Logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { SearchInput } from './SearchInput'
-import { Heart, Mail } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { DropdownMenuDemo } from './DropdownMenu'
 import { Session } from 'next-auth'
 import { auth } from '@/auth'
@@ -32,6 +32,12 @@ export const Header = async () => {
             </div>
             <div className='flex gap-1 items-center'>
                 <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+                    <Link href={`/user/${session?.user.username}/publish`}>
+                        <span className='font-semibold text-sm'>Publish new api</span>
+                    </Link> 
+                </div>
+
+                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
                     <Link href={'/dashboard'}>
                         <span className='font-semibold text-sm'>Api marketplace</span>
                     </Link> 
@@ -50,13 +56,6 @@ export const Header = async () => {
                         <Heart className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </Link>
                 </div>
-
-                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
-                    <Link href={'/inbox'}>
-                        <Mail className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-                    </Link>
-                </div>
-
 
                 <div className='p-2'>
                     <DropdownMenuDemo session={session} />

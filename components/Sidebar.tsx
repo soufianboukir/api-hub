@@ -2,7 +2,7 @@
 import { CategoryI } from '@/models/category.model'
 import { getCategories } from '@/services/categories'
 import { AxiosResponse } from 'axios'
-import { AlignJustify, Earth, Folder, Star } from 'lucide-react'
+import { AlignJustify, Earth, Folder, Mail } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -44,9 +44,9 @@ export const Sidebar = async () => {
                 </div>
 
                 <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                <Link href="/workspace" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
-                    <Star className="w-5 h-5" />
-                    <span>Workspace</span>
+                <Link href="/inbox" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                    <Mail className="w-5 h-5" />
+                    <span>Inbox</span>
                 </Link>
                 </div>
 

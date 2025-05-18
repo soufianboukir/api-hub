@@ -1,7 +1,6 @@
 'use client'
 
 import { Bell, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -35,7 +34,7 @@ export default function Notifications() {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant="ghost" size={'icon'} className="relative cursor-pointer rounded-full">
+            <button  className="relative hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
                 <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 {
                     notifications.some((notification) => !notification.isRead) ?
@@ -44,7 +43,7 @@ export default function Notifications() {
                         </div>
                     :null
                 }
-            </Button>
+            </button>
         </PopoverTrigger>
         <PopoverContent 
             className="w-96 p-0 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800"
