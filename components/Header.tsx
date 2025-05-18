@@ -32,13 +32,13 @@ export const Header = async () => {
             </div>
             <div className='flex gap-1 items-center'>
                 <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
-                    <Link href={`/user/${session?.user.username}/publish`}>
+                    <Link href={`/user/${session?.user.username}/publishApi`}>
                         <span className='font-semibold text-sm'>Publish new api</span>
-                    </Link> 
+                    </Link>
                 </div>
 
                 <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
-                    <Link href={'/dashboard'}>
+                    <Link href={'/hub'}>
                         <span className='font-semibold text-sm'>Api marketplace</span>
                     </Link> 
                 </div>
@@ -51,7 +51,7 @@ export const Header = async () => {
                     <Notifications />
                 </div>
 
-                <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+                <div className="duration-200 p-2 rounded-md cursor-pointer">
                     <Link href={`/user/${session?.user.username}/favorites`}>
                         <Heart className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                     </Link>

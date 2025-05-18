@@ -67,7 +67,7 @@ export const Sidebar = async () => {
                 {categories && categories.length ? (
                     categories.map((category) => (
                     <div key={category._id as string} className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                        <Link href={`/search/${category.name}`} className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
+                        <Link href={`/search/category/${category.name}`} className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
                         <span>{category.name}</span>
                         </Link>
                     </div>
@@ -75,13 +75,6 @@ export const Sidebar = async () => {
                 ) : (
                     <span className="text-sm text-gray-500 dark:text-gray-400">No category available</span>
                 )}
-
-                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                    <Link href="/dashboard" className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
-                    <AlignJustify className="w-5 h-5" strokeWidth={1.5} />
-                    <span>More categories</span>
-                    </Link>
-                </div>
                 </div>
             </div>
         </div>

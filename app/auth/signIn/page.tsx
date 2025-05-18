@@ -4,7 +4,6 @@ import Image from 'next/image'
 import appLogo from '../../../public/apihub-Logo.png'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 import googleLogo from '../../../public/google-Logo.webp'
-import githubLogo from '../../../public/github-Logo.png'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -212,7 +211,7 @@ function Page() {
                         </div>
 
                         <div className="space-y-4 mt-4">
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 gap-3">
                                 <button
                                     type="button"
                                     onClick={() => signIn('google',{ callbackUrl: '/hub' })}
@@ -224,18 +223,6 @@ function Page() {
                                         className="w-7 h-7 mr-2"
                                     />
                                     Google
-                                </button>
-
-                                <button
-                                type="button"
-                                className="w-full cursor-pointer inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-md shadow-sm light:bg-white text-sm font-medium light:text-gray-700 light:hover:bg-gray-50 transition-colors"
-                                >
-                                <Image
-                                    src={githubLogo}
-                                    alt="GitHub" 
-                                    className="w-5 h-5 mr-2"
-                                />
-                                GitHub
                                 </button>
                             </div>
                         </div>

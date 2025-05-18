@@ -1,4 +1,5 @@
 import { Category } from '@/components/Category';
+import { FeedApis } from '@/components/client/FeedApis';
 import { fetchCategories } from '@/components/Sidebar'
 import { CategoryI } from '@/models/category.model';
 import React from 'react'
@@ -19,7 +20,11 @@ async function page() {
                     ) : "No category available"
                 }
             </div>
-            <h1 className='font-semibold text-3xl'>MAIN PAGE</h1>
+            <br />
+            <br />
+            <h1 className='font-semibold text-3xl'>Available apis</h1>
+            <FeedApis />
+            <br />
         </div>
     )
 }

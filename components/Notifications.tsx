@@ -34,7 +34,7 @@ export default function Notifications() {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <button  className="relative hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
+            <button  className="relative duration-200 p-2 rounded-md cursor-pointer">
                 <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 {
                     notifications.some((notification) => !notification.isRead) ?

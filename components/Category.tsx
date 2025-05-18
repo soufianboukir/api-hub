@@ -13,7 +13,7 @@ export const Category = ({category}:{category:CategoryI}) => {
                   : category.description
             }</p>
             <br />
-            <Link href={`/search/${category.name}`} className='text-blue-600 hover:underline duration-100'>
+            <Link href={`/search/category/${category.name}`} className='text-blue-600 hover:underline duration-100'>
                 Browse category
             </Link>
         </div>
