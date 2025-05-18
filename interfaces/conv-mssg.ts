@@ -13,5 +13,6 @@ export interface Message {
     _id: string, 
     sender: UserI,
     text: string,
-    isRead?: boolean
+    isRead?: boolean,
+    createdAt: Date
 }

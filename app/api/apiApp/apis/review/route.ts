@@ -22,7 +22,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
             },{
                 status:404
             })
-        }
+        }        
 
         if(api.author.toString() !== session.user.id){
             await Notification.create({
@@ -42,10 +42,12 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
         return NextResponse.json({
             message: "Successfully reviewed this api!"
         })
-    }catch{
+    }catch(error){
+        console.log(error);
+        
         return NextResponse.json(
             {
-                error:"Failed to fetch user apis",
+                error:"Failed to review api",
             }, {
                 status : 500,
             }

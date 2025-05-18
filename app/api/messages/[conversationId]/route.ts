@@ -31,37 +31,39 @@ export const GET = async (
 };
 
 export const POST = async (
-  request: NextRequest,
-  { params }: { params: { conversationId: string } }
-): Promise<NextResponse> => {
+    request: NextRequest,
+    context: { params: Promise<{ conversationId: string }> }
+  ): Promise<NextResponse> => {
     try {
         const session = await auth();
         if (!session) {
-        return NextResponse.json({ 
-            message: "Unauthorized" }, 
-            { status: 401 });
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
-
+    
+        const { conversationId } = await context.params;
+    
         const { text } = await request.json();
-
+    
         const newMessage = await new Message({
             sender: session.user.id,
-            conversation: new mongoose.Types.ObjectId(params.conversationId),
+            conversation: conversationId,
             text,
         }).save();
-
-        await Conversation.findByIdAndUpdate(params.conversationId, {
+    
+        await Conversation.findByIdAndUpdate(conversationId, {
             lastMessage: text,
             updatedAt: new Date(),
         });
-
-        return NextResponse.json({ 
-            message: "Message sent", 
-            newMessage });
-    } catch{
-            return NextResponse.json(
-                { message: "Failed to send message" },
-                { status: 500 }
-            );
+    
+        return NextResponse.json({
+            message: "Message sent",
+            newMessage,
+        });
+    } catch {
+        return NextResponse.json(
+            { message: "Failed to send message" },
+            { status: 500 }
+        );
     }
-};
+  };
+  

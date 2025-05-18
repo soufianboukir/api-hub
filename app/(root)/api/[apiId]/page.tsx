@@ -18,7 +18,6 @@ async function page({params}: {params: {apiId: string}}) {
         return notFound();
       }
       const session = await auth();
-      console.log(apiData.author._id);
       
       return (
         <div className="max-w-5xl mx-auto p-6 space-y-8 font-sans light:bg-gray-50 min-h-screen">

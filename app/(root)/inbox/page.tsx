@@ -2,44 +2,68 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { getConversations } from '@/services/conversations';
-import { getMessages } from '@/services/messages';
+import { _sendMessage, getMessages } from '@/services/messages';
 import { toast } from 'sonner';
 import { Conversation, Message } from '@/interfaces/conv-mssg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Search, Send, MoreVertical } from 'lucide-react';
+import { Search, Send, ExternalLink } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { Loading } from '@/components/Loading';
 import { UserI } from '@/models/user.model';
+import Link from 'next/link';
+import socket from '@/app/socket';
 
 export default function ConversationsPage() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [filteredConversations,setFilteredConversations] = useState<Conversation[]>([])
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [otherParticipant,setOtherParticipant] = useState<UserI>();
+    const [query,setQuery] = useState<string>('')
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const conversationsToShow = query ? filteredConversations : conversations;
     const {data: session, status} = useSession();
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
       if (!newMessage.trim()) return;
       const newMsg: Message = {
         _id: String(Date.now()),
         text: newMessage,
-        sender: { name: 'Me' },
-        createdAt: new Date().toISOString(),
+        sender: { _id: session?.user.id },
+        createdAt: new Date(),
       };
-      setMessages((prev) => [...prev, newMsg]);
+
+      try {
+        await _sendMessage(selectedConversation._id, newMessage);
+        socket.emit("send_message", {
+          conversationId: selectedConversation?._id,
+          message: newMsg,
+        });
+        setConversations((prev) => {
+          const updatedConversation = {
+            ...selectedConversation,
+            lastMessage: newMessage,
+            updatedAt: new Date().toISOString(),
+          };
+    
+          const filtered = prev.filter((c) => c._id !== selectedConversation._id);
+          return [updatedConversation, ...filtered];
+        });
+    
+      } catch {
+        toast.error('Failed to send message');
+      }      
       setNewMessage('');
-      scrollToBottom();
     };    
 
     useEffect(() => {
@@ -61,14 +85,41 @@ export default function ConversationsPage() {
     }, []);
 
     useEffect(() => {
+      const searchConv = () => {
+        const lowerTerm = query.toLowerCase();
+    
+        return conversations.filter((conversation) => {
+          const otherParticipant = conversation.participants.find(
+            (p) => p._id !== session?.user.id
+          );
+          if (!otherParticipant) return false;
+    
+          return (
+            otherParticipant.name?.toLowerCase().includes(lowerTerm) ||
+            otherParticipant.username?.toLowerCase().includes(lowerTerm)
+          );
+        });
+      };
+    
+      if (query !== '') {
+        const results = searchConv();
+        setFilteredConversations(results);
+      } else {
+        setFilteredConversations(conversations);
+      }
+    }, [query, conversations, session?.user.id]);
+    
+
+    useEffect(() => {
       const fetchMessages = async () => {
         if (!selectedConversation) return;
+        socket.emit("join_conversation", selectedConversation?._id);
+
         try {
-          setOtherParticipant(selectedConversation.participants.find((p) => p.email !== session?.user?.email))
           const response = await getMessages(selectedConversation._id);
+          
           if (response.status === 200) {
             setMessages(response.data.messages);
-            scrollToBottom();
           }
         } catch {
           toast.error('Operation failed', {
@@ -78,6 +129,25 @@ export default function ConversationsPage() {
       };
       fetchMessages();
     }, [selectedConversation]);
+
+    useEffect(() =>{
+        setOtherParticipant(selectedConversation?.participants.find((p) => p._id !== session?.user?.id))
+    },[selectedConversation,session?.user.id])
+
+
+    useEffect(() => {
+      socket.on("new_message", (message) => {
+        setMessages((prev) => [...prev, message]);
+      });
+
+      return () => {
+        socket.off("new_message");
+      };
+    }, []);
+
+    useEffect(() => {
+      scrollToBottom();
+    }, [messages]);
 
     if(status === 'loading') return <Loading />
 
@@ -90,14 +160,16 @@ export default function ConversationsPage() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Search conversations..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   className="pl-10 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-blue-500 transition"
                 />
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar">
-              {conversations.map((conv) => {
-                const participant = conv.participants.find((p) => p.email !== session?.user?.email);
+              {conversationsToShow.map((conv) => {
+                const participant = conv.participants.find((p) => p._id !== session?.user?.id);
 
                 return (
                   <div
@@ -159,7 +231,9 @@ export default function ConversationsPage() {
 
                     <div className="flex-1">
                       <div className="font-semibold text-lg">
-                        {otherParticipant?.name}
+                        <Link href={`/user/${otherParticipant?.username}`}>
+                          {otherParticipant?.name}
+                        </Link>
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
                         Last active{' '}
@@ -176,38 +250,47 @@ export default function ConversationsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+                    className="hover:bg-blue-400 cursor-pointer bg-blue-500 text-white dark:hover:bg-gray-800"
                   >
-                    <MoreVertical className="h-5 w-5" />
+                    <Link href={`/api/${selectedConversation.api}`}>
+                      <ExternalLink className="h-5 w-5" />
+                    </Link>
                   </Button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50 dark:bg-gray-950 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/dark-cubes.png')] bg-opacity-5 custom-scrollbar">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg._id}
-                      className={cn('flex transition-all duration-200', msg.sender.name === 'Me' ? 'justify-end' : 'justify-start')}
-                    >
+                  {messages.map((msg) => {
+                    const isOwnMessage = msg.sender._id === session?.user.id;
+
+                    return (
                       <div
+                        key={msg._id}
                         className={cn(
-                          'max-w-sm p-4 rounded-2xl shadow transition-all duration-200',
-                          msg.sender.name === 'Me'
-                            ? 'bg-blue-600 text-white rounded-tr-none'
-                            : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tl-none'
+                          'flex transition-all duration-200',
+                          !isOwnMessage ? 'justify-start' : 'justify-end'
                         )}
                       >
-                        <p className="leading-relaxed">{msg.text}</p>
                         <div
                           className={cn(
-                            'text-xs mt-2 opacity-70',
-                            msg.sender.name === 'Me' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                            'max-w-sm p-4 rounded-2xl shadow transition-all duration-200',
+                            !isOwnMessage
+                              ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tl-none'
+                              : 'bg-blue-600 text-white rounded-tr-none'
                           )}
                         >
-                          {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true })}
+                          <p className="leading-relaxed">{msg.text}</p>
+                          <div
+                            className={cn(
+                              'text-xs mt-2 opacity-70',
+                              !isOwnMessage ? 'text-gray-500 dark:text-gray-400' : 'text-blue-100'
+                            )}
+                          >
+                            {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true })}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   <div ref={messagesEndRef} />
                 </div>
 

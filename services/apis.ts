@@ -52,6 +52,6 @@ export const unfavoriteApi = async (apiId: string) =>{
 }
 
 export const reviewApi = async ({apiId,review}: {apiId: string, review: string}) =>{
-    const response = await api.post('/api/apiApp/apis/review',{apiId,review});
+    const response = await api.post('/api/apiApp/apis/review',{apiId,review});    
     return response;
 }

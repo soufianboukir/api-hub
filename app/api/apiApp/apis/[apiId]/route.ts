@@ -3,51 +3,50 @@ import { dbConnection } from "@/lib/dbConnection";
 import Api from "@/models/api.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest, { params }: {params: {apiId: string}}):
- Promise<NextResponse> =>{
-    try{
+export const GET = async (
+    request: NextRequest,
+    context: { params: Promise<{ apiId: string }> }
+  ): Promise<NextResponse> => {
+    try {
         const session = await auth(request);
-        if(!session){
-            return NextResponse.json({
-                message: "Unauthorized"
-            },{
-                status:401
-            })
+        if (!session) {
+            return NextResponse.json(
+            { message: "Unauthorized" },
+            { status: 401 }
+            );
         }
-
-        const { apiId } = params;
+    
+        const { apiId } = await context.params; 
+    
         await dbConnection();
+    
         const api = await Api.findById(apiId)
-                            .populate('author')
-                            .populate('category')
-                            .populate({
-                                path: 'reviews',
-                                populate: {
-                                  path: 'author',
-                                  model: 'User'
-                                }
-                              });
-        
-        if(api){
-            return NextResponse.json({
-                api
-            })
+            .populate('author')
+            .populate('category')
+            .populate({
+            path: 'reviews',
+            populate: {
+                path: 'author',
+                model: 'User',
+            },
+            });
+    
+        if (api) {
+            return NextResponse.json({ api });
         }
-        return NextResponse.json({
-            message: "Api not found"
-        },{
-            status:404
-        })
-    }catch{
+    
         return NextResponse.json(
-            {
-                error:"Failed to fetch api",
-            }, {
-                status : 500,
-            }
-        ); 
+            { message: "API not found" },
+            { status: 404 }
+        );
+    } catch {
+        return NextResponse.json(
+            { error: "Failed to fetch API" },
+            { status: 500 }
+        );
     }
-}
+};
+  
 
 
 export async function PUT(request: Request, { params } : { params: { apiId: string } }) {

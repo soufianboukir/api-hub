@@ -42,7 +42,6 @@ export const Header = async () => {
                 </div>
                 
                 <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
-                    {/* <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" /> */}
                     <Notifications />
                 </div>
 
@@ -53,7 +52,9 @@ export const Header = async () => {
                 </div>
 
                 <div className="hover:bg-gray-100 dark:hover:bg-gray-800 duration-200 p-2 rounded-md cursor-pointer">
-                    <Mail className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                    <Link href={'/inbox'}>
+                        <Mail className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                    </Link>
                 </div>
 
 

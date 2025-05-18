@@ -45,7 +45,6 @@ const apiShema = new Schema<ApiI>({
         {
             url: {
                 type: String,
-                required: true
             },
             description: {
                 type: String,

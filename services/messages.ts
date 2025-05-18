@@ -5,7 +5,7 @@ export const getMessages = async (conversationId: string) =>{
     return response;
 }
 
-export const sendMessage = async (conversationId: string, message: string) =>{
-    const response = await api.post(`/api/messages/${conversationId}`,{message});
+export const _sendMessage = async (conversationId: string, text: string) =>{
+    const response = await api.post(`/api/messages/${conversationId}`,{text});
     return response;
 }
