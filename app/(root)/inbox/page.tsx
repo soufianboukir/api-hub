@@ -257,7 +257,7 @@ export default function ConversationsPage() {
               })}
               {
                 loadConvs ?
-                  <h1 className='text-xl mt-2'>Loading your conversations...</h1>
+                  <h1 className='text-xl mt-2 ml-2'>Loading your conversations...</h1>
                 :null
               }
             </div>
