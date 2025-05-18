@@ -2,7 +2,7 @@
 import { CategoryI } from '@/models/category.model'
 import { getCategories } from '@/services/categories'
 import { AxiosResponse } from 'axios'
-import { AlignJustify, Earth, Folder, Mail } from 'lucide-react'
+import { Earth, Mail } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -37,24 +37,17 @@ export const Sidebar = async () => {
         <div className="bg-gray-50 dark:bg-[#1a1a1a] w-[20%] border-r border-gray-200 dark:border-gray-700 pt-10 px-6 h-[92vh] mt-[8vh] fixed lg:block hidden">
             <div className="flex flex-col gap-2">
                 <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                <Link href="/hub" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
-                    <Earth className="w-5 h-5" />
-                    <span>Discovery</span>
-                </Link>
+                    <Link href="/hub" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                        <Earth className="w-5 h-5" />
+                        <span>Discovery</span>
+                    </Link>
                 </div>
 
                 <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                <Link href="/inbox" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
-                    <Mail className="w-5 h-5" />
-                    <span>Inbox</span>
-                </Link>
-                </div>
-
-                <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                <Link href="/collections" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
-                    <Folder className="w-5 h-5" />
-                    <span>Collections</span>
-                </Link>
+                    <Link href="/inbox" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
+                        <Mail className="w-5 h-5" />
+                        <span>Inbox</span>
+                    </Link>
                 </div>
             </div>
 

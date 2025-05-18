@@ -9,3 +9,8 @@ export const _sendMessage = async (conversationId: string, text: string) =>{
     const response = await api.post(`/api/messages/${conversationId}`,{text});
     return response;
 }
+
+export const _deleteMessage = async (messageId: string) =>{
+    const response = await api.delete(`/api/messages/deleteMessage/${messageId}`);
+    return response
+}

@@ -36,8 +36,10 @@ export const ApiCard = ({api,isOwner,isOnFavoritePage,favorite_id} : ApiCardProp
     return (
         <div className='px-5 py-3 shadow-sm border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 duration-100 bg-white dark:bg-gray-900'>
             <div className='flex items-center justify-between'>
-                <span className='bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-md'>
-                    {api.category.name}
+                <span className='bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-md cursor-pointer'>
+                    <Link href={`/search/category/${api.category.name}`}>
+                        {api.category.name}
+                    </Link>
                 </span>
 
                 <div className='flex gap-2'>

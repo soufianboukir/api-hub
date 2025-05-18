@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { getConversations } from '@/services/conversations';
-import { _sendMessage, getMessages } from '@/services/messages';
+import { _deleteMessage, _sendMessage, getMessages } from '@/services/messages';
 import { toast } from 'sonner';
 import { Conversation, Message } from '@/interfaces/conv-mssg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Search, Send, ExternalLink } from 'lucide-react';
+import { Search, Send, ExternalLink, Delete, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -30,6 +30,8 @@ export default function ConversationsPage() {
     const conversationsToShow = query ? filteredConversations : conversations;
     const {data: session, status} = useSession();
     const selectedConversationRef = useRef<Conversation | null>(null);
+    const [loadConvs,setLoadConvs] = useState<boolean>(true);
+    const [loadMssgs,setLoadMssgs] = useState<boolean>(false);
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,11 +68,31 @@ export default function ConversationsPage() {
         toast.error('Failed to send message');
       }      
       setNewMessage('');
-    };    
+    };
+
+    const deleteMessage = (messageId: string) =>{
+      try{
+        toast.promise(_deleteMessage(messageId),{
+          loading: '...Deleting message',
+          success: (res) => {
+            const newMessages = messages.filter((message) => message._id !== messageId);
+            setMessages(newMessages)
+            return res.data.message
+          },
+          error: (err) => err.response.data.message
+        })
+
+      }catch{
+        toast.error('Operation failed',{
+          description: 'Failed to delete message'
+        })
+      }
+    }
 
     useEffect(() => {
       const fetchConversations = async () => {
         try {
+          setLoadConvs(true)
           const response = await getConversations();
           if (response.status === 200) {
             setConversations(response.data.conversations);
@@ -81,6 +103,8 @@ export default function ConversationsPage() {
           toast.error('Operation failed', {
             description: 'Failed to load your conversations',
           });
+        }finally{
+          setLoadConvs(false);
         }
       };
       fetchConversations();
@@ -118,6 +142,7 @@ export default function ConversationsPage() {
         socket.emit("join_conversation", selectedConversation?._id);
 
         try {
+          setLoadMssgs(true);
           const response = await getMessages(selectedConversation._id);
           
           if (response.status === 200) {
@@ -127,6 +152,8 @@ export default function ConversationsPage() {
           toast.error('Operation failed', {
             description: 'Failed to load your messages',
           });
+        }finally{
+          setLoadMssgs(false);
         }
       };
       fetchMessages();
@@ -228,6 +255,11 @@ export default function ConversationsPage() {
                   </div>
                 );
               })}
+              {
+                loadConvs ?
+                  <h1 className='text-xl mt-2'>Loading your conversations...</h1>
+                :null
+              }
             </div>
           </div>
 
@@ -288,19 +320,30 @@ export default function ConversationsPage() {
                       <div
                         key={msg._id}
                         className={cn(
-                          'flex transition-all duration-200',
+                          'flex transition-all duration-200 group',
                           !isOwnMessage ? 'justify-start' : 'justify-end'
                         )}
                       >
                         <div
                           className={cn(
-                            'max-w-sm p-4 rounded-2xl shadow transition-all duration-200',
+                            'relative max-w-sm p-4 rounded-2xl shadow transition-all duration-200',
                             !isOwnMessage
                               ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tl-none'
                               : 'bg-blue-600 text-white rounded-tr-none'
                           )}
                         >
-                          <p className="leading-relaxed">{msg.text}</p>
+                          {isOwnMessage && (
+                            <button
+                              onClick={() => deleteMessage(msg._id)}
+                              className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow cursor-pointer"
+                              title="Delete message"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+
+                          <p className="leading-relaxed break-words">{msg.text}</p>
+
                           <div
                             className={cn(
                               'text-xs mt-2 opacity-70',
@@ -313,6 +356,11 @@ export default function ConversationsPage() {
                       </div>
                     );
                   })}
+                  {
+                    loadMssgs ?
+                      <h1 className='text-xl text-center mt-2'>Loading your messages...</h1>
+                    :null
+                  }
                   <div ref={messagesEndRef} />
                 </div>
 
