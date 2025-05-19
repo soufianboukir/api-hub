@@ -1,6 +1,10 @@
 'use client'
 import React, { useState } from 'react';
-import { SearchIcon, Zap, Shield, Code, BarChart2, Globe, ArrowRight, Check, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Zap, Shield, Code, BarChart2, Globe, ArrowRight, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
+import apiHubLogo from '../public/apihub-Logo.png'
 
 const API_CATEGORIES = [
   { name: 'Finance', icon: <BarChart2 className="w-5 h-5" /> },
@@ -28,66 +32,53 @@ const PRICING_PLANS = [
   { name: 'Enterprise', price: 'Custom', features: ['Unlimited requests', 'Dedicated infrastructure', '24/7 support'] },
 ];
 
-const SearchComponent = () => {
-  const [query, setQuery] = useState('');
-  const [isExpanded, setIsExpanded] = useState(false);
-  
-  return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-          <SearchIcon className="w-5 h-5 text-gray-400" />
-        </div>
-        <input
-          type="text"
-          className="w-full py-4 pl-12 pr-12 text-lg bg-white border border-gray-200 rounded-xl shadow-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Search for APIs..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsExpanded(true)}
-        />
-        {query && (
-          <button
-            onClick={() => setQuery('')}
-            className="absolute inset-y-0 right-12 flex items-center pr-2 text-gray-400 hover:text-gray-600"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600"
-        >
-          {isExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
-        </button>
-      </div>
-      {isExpanded && (
-        <div className="absolute z-10 w-full mt-2 overflow-hidden bg-white border border-gray-200 rounded-xl shadow-xl">
-          <div className="p-4">
-            <h3 className="text-sm font-semibold text-gray-500">Popular APIs</h3>
-            <ul className="mt-2 space-y-2">
-              {FEATURED_APIS.map((api) => (
-                <li key={api.id} className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{api.name}</span>
-                    <span className="text-sm text-gray-500">{api.category}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+     
 
 const LandingPage = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   return (
     <div className="font-sans antialiased text-gray-900">
+      <header className='flex justify-between lg:px-20 px-4 py-2 bg-white items-center fixed w-full z-10'>
+        <div>
+          <Image src={apiHubLogo} alt='App logo' width={200} height={100}/>
+        </div>
+
+        <div className='lg:flex hidden gap-8'>
+          <Link 
+            href={'/#'} 
+            className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
+                      px-5 py-2 rounded-lg hover:bg-blue-50'
+          >
+            About
+          </Link>
+          <Link 
+            href={'/#'} 
+            className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
+                      px-5 py-2 rounded-lg hover:bg-blue-50'
+          >
+            Services
+          </Link>
+          <Link 
+            href={'/#'} 
+            className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
+                      px-5 py-2 rounded-lg hover:bg-blue-50'
+          >
+            Contact
+          </Link>
+        </div>
+
+        <div className='flex gap-2'>
+          <Button className='border-2 text-lg bg-white text-blue-500 border-blue-500 px-4 py-2 hover:bg-gray-100 cursor-pointer'>
+            Login
+          </Button>
+          <Button className='bg-blue-500 text-lg px-4 py-2 text-white cursor-pointer hover:bg-blue-600 cursor-pointer'>
+            Regiser
+          </Button>
+        </div>
+      </header>
       <header className="relative bg-gradient-to-br from-blue-600 to-indigo-800 overflow-hidden">
+        <br /><br /><br />
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center">
@@ -98,7 +89,11 @@ const LandingPage = () => {
               Discover, connect, and deploy thousands of high-quality APIs to power your applications
             </p>
             <div className="mb-16">
-              <SearchComponent />
+              <Link href={'/hub'}>
+                <Button className='bg-blue-600 text-white px-5 py-2 hover:bg-blue-700 cursor-pointer font-semibold text-lg'>
+                  Get started
+                </Button>
+              </Link>
             </div>
             <div className="flex flex-wrap justify-center gap-4">
               {API_CATEGORIES.map((category) => (
@@ -113,7 +108,6 @@ const LandingPage = () => {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
       </header>
 
-      {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -137,7 +131,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Featured APIs */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -200,7 +193,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -244,7 +236,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="py-20 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -279,7 +270,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Pricing */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -331,7 +321,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Build Something Amazing?</h2>
