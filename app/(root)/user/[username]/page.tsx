@@ -37,7 +37,7 @@ async function page({params}:UserProfilePageProps) {
 
             <div className="mt-20 flex items-center justify-between flex-wrap">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{data.user.username}</h1>
-
+                
                 {isOwner && (
                     <div className="flex gap-3">
                         <Link

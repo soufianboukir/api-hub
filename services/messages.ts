@@ -14,3 +14,13 @@ export const _deleteMessage = async (messageId: string) =>{
     const response = await api.delete(`/api/messages/deleteMessage/${messageId}`);
     return response
 }
+
+export const getUnseenMessages = async () =>{
+    const response = await api.get(`/api/getUnseenMessages`);
+    return response.data.unseenMessages;
+}
+
+export const markMessagesAsRead = async (conversationId: string) =>{
+    const response = await api.post(`/api/${conversationId}/markMessagesAsRead`);
+    return response;
+}

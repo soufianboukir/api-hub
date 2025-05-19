@@ -52,25 +52,33 @@ const LandingPage = () => {
 
         <div className='lg:flex hidden gap-8'>
           <Link 
-            href={'/#'} 
+            href={'/#about'} 
             className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
                       px-5 py-2 rounded-lg hover:bg-blue-50'
           >
             About
           </Link>
           <Link 
-            href={'/#'} 
+            href={'/#feautures'} 
             className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
                       px-5 py-2 rounded-lg hover:bg-blue-50'
           >
-            Services
+            Feautures
           </Link>
           <Link 
-            href={'/#'} 
+            href={'/#whyUs'} 
             className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
                       px-5 py-2 rounded-lg hover:bg-blue-50'
           >
-            Contact
+            Why us?
+          </Link>
+
+          <Link 
+            href={'/#plans'} 
+            className='font-medium text-gray-700 hover:text-blue-600 text-lg duration-300 transition-all 
+                      px-5 py-2 rounded-lg hover:bg-blue-50'
+          >
+            Plans
           </Link>
         </div>
 
@@ -109,7 +117,7 @@ const LandingPage = () => {
           }
         </div>
       </header>
-      <header className="relative bg-gradient-to-br from-blue-600 to-indigo-800 overflow-hidden">
+      <header className="relative bg-gradient-to-br from-blue-600 to-indigo-800 overflow-hidden" id='about'>
         <br /><br /><br />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center">
@@ -161,7 +169,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50" id='feautures'>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured APIs</h2>
@@ -223,7 +231,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id='whyUs'>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Developers Love Us</h2>
@@ -300,7 +308,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id='plans'>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>

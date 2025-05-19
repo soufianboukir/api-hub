@@ -37,7 +37,7 @@ export const GET = async (request: NextRequest):Promise<NextResponse> =>{
                 { title: { $regex: query, $options: 'i' } },
                 { description: { $regex: query, $options: 'i' } },
             ],
-        }).limit(3);
+        }).limit(3).populate('category');
 
         return NextResponse.json({
             users,

@@ -2,43 +2,36 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { SearchIcon, ChevronDown, ChevronUp, X } from "lucide-react";
+import { searchByQuery } from "@/services/search";
+import Link from "next/link";
+import { UserI } from "@/models/user.model";
+import { SimplifiedApi } from "@/interfaces/api";
 
-const testApis = [
-  { id: "1", title: "Social Media API", category: "Social" },
-  { id: "2", title: "Weather Forecast API", category: "Weather" },
-  { id: "3", title: "Payment Gateway API", category: "Finance" },
-  { id: "4", title: "Maps and Geolocation API", category: "Location" },
-  { id: "5", title: "News API", category: "Media" },
-  { id: "6", title: "Sports Stats API", category: "Sports" },
-];
 
 export const SearchInput = () => {
     const [query, setQuery] = useState("");
-    const [results, setResults] = useState(testApis);
+    const [results, setResults] = useState({users: [], apis: []});
     const [isFocused, setIsFocused] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (isFocused) {
-          document.body.style.overflow = "hidden";
-        } else {
-          document.body.style.overflow = "auto";
+        const fetchData = async () =>{
+            if (query.trim() === "") {
+                setResults({users: [],
+                    apis: []
+                });
+            } else {
+                const response = await searchByQuery(query);
+                if(response.status === 200){
+                    setResults({
+                        users: response.data.users || [],
+                        apis: response.data.apis || []
+                    })
+                }
+            }
         }
-        return () => {
-          document.body.style.overflow = "auto";
-        };
-    }, [isFocused]);
-
-    useEffect(() => {
-        if (query.trim() === "") {
-        setResults(testApis);
-        } else {
-        const filtered = testApis.filter((api) =>
-            api.title.toLowerCase().includes(query.toLowerCase())
-        );
-        setResults(filtered);
-        }
+        fetchData();
     }, [query]);
 
     useEffect(() => {
@@ -99,41 +92,66 @@ export const SearchInput = () => {
             </div>
 
             {isFocused && isExpanded && (
-                <div className="absolute bg-white z-50 mt-2 w-[170%] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-200 transform origin-top dark:bg-gray-900/95">          
-                    {results.length > 0 ? (
-                        <ul className="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-                        {results.map(({ id, title, category }) => (
-                            <li
-                            key={id}
-                            className="px-4 py-3 dark:hover:bg-gray-800 hover:bg-blue-50 transition-colors duration-150 cursor-pointer group"
-                            onMouseDown={() => {
-                                setQuery(title);
-                                setIsFocused(false);
-                                setIsExpanded(false);
-                            }}
-                            >
-                            <div className="flex justify-between items-center">
-                                <span className="font-medium text-gray-900 group-hover:text-blue-600 dark:text-white">
-                                    {title}
-                                </span>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {category}
-                                </span>
+                <div className="absolute bg-white z-50 mt-2 w-[170%] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-200 transform origin-top dark:bg-gray-900">          
+                    {results.users.length > 0 || results.apis.length > 0 ? (
+                    <div className="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                        {results.users.length > 0 && (
+                            <div className="px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                                Users
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                                API ID: {id} • Example description
-                            </p>
-                            </li>
-                        ))}
+                        )}
+                        <ul>
+                            {results.users.map((user: UserI) => (
+                                <li
+                                    key={user.id}
+                                    className="px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-800 cursor-pointer group"
+                                >
+                                    <Link href={`/user/${user.username}`}>
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-medium text-gray-900 group-hover:text-blue-600 dark:text-white">
+                                                {user.username}
+                                            </span>
+                                            <span className="text-xs text-gray-500">{user.name}</span>
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
-                    ) : (
-                        <div className="px-4 py-6 text-center">
+
+                        {results.apis.length > 0 && (
+                            <div className="px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                                APIs
+                            </div>
+                        )}
+                        <ul>
+                            {results.apis.map((api: SimplifiedApi) => (
+                                <li
+                                    key={api._id}
+                                    className="px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-800 cursor-pointer group"
+                                >
+                                    <Link href={`/api/${api._id}`}>
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-medium text-gray-900 group-hover:text-blue-600 dark:text-white">
+                                                {api.title}
+                                            </span>
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {api.category.name}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm text-gray-600">{api.description.substring(0,50)}...</p>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    <div className="px-4 py-6 text-center">
                         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 mb-3">
                             <SearchIcon className="h-5 w-5 text-gray-400" />
                         </div>
                         <h3 className="text-sm font-medium text-gray-900">No results</h3>
                         <p className="mt-1 text-sm text-gray-500">
-                            We couldn't find any APIs matching "{query}"
+                            We couldn&quot;t find any results matching &quot;{query}&quot;
                         </p>
                         <button
                             onClick={clearSearch}
@@ -141,8 +159,8 @@ export const SearchInput = () => {
                         >
                             Clear search
                         </button>
-                        </div>
-                    )}
+                    </div>
+                )}
                 </div>
             )}
         </div>

@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import Message from "@/models/message.model";
 import Conversation from "@/models/conversation.model";
 import { NextRequest, NextResponse } from "next/server";
-import mongoose from "mongoose";
 
 export const GET = async (
     request: NextRequest,
