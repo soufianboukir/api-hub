@@ -13,7 +13,8 @@ export const GET = async (request:NextRequest): Promise<NextResponse> =>{
                         {username:1,
                             profile_picture:1,
                             bg_picture:1,
-                            defaultColor:1
+                            defaultColor:1,
+                            bio: 1
                         });
         if(user){
             return NextResponse.json({user});

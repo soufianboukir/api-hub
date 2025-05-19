@@ -5,12 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
     try {
-        const session = await auth(request);
+        const session = await auth();
         if (!session) {
-            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+            return NextResponse.json({ 
+                message: 'Unauthorized' 
+            }, { status: 401 });
         }
 
         const userId: string = session.user.id;
+        
         const userObjectId = new mongoose.Types.ObjectId(userId);
 
         const unseen = await Message.aggregate([
@@ -47,8 +50,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         const unseenMessages = unseen[0]?.unseenConversations || 0;
         return NextResponse.json({ unseenMessages });
 
-    } catch (error) {
-        console.error('Error in GET /messages/unseen:', error);
+    } catch {
         return NextResponse.json({
             message: 'Failed to fetch resource'
         }, {

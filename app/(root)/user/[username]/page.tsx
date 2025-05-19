@@ -31,6 +31,7 @@ async function page({params}:UserProfilePageProps) {
         redirect(`/user-not-found?username=${username}`);
     }
     
+    
     return (
         <div className="w-full px-6 py-8 light:bg-white rounded-lg shadow-sm">
             <UploadProfileImages user={data.user} isOwner={isOwner} />
@@ -58,10 +59,14 @@ async function page({params}:UserProfilePageProps) {
                     </div>
                 )}
             </div>
-
+            <div className='mt-4'>
+                <p className='text-lg font-semibold'>
+                    {data.user.bio}
+                </p>
+            </div>
             <div className="mt-10">
                 <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Published APIs</h2>
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Published APIs</h2>
                 </div>
                 <hr className="w-32 border-t-2 border-blue-500" />
             </div>

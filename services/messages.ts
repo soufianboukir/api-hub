@@ -16,11 +16,11 @@ export const _deleteMessage = async (messageId: string) =>{
 }
 
 export const getUnseenMessages = async () =>{
-    const response = await api.get(`/api/getUnseenMessages`);
-    return response.data.unseenMessages;
+    const response = await api.get(`/api/messages/getUnseenMessages`);
+    return response;
 }
 
 export const markMessagesAsRead = async (conversationId: string) =>{
-    const response = await api.post(`/api/${conversationId}/markMessagesAsRead`);
+    const response = await api.post(`/api/messages/markMessagesAsRead`,{conversationId});
     return response;
 }

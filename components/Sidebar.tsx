@@ -1,11 +1,11 @@
 'use server'
 import { CategoryI } from '@/models/category.model'
 import { getCategories } from '@/services/categories'
-import { getUnseenMessages } from '@/services/messages'
 import { AxiosResponse } from 'axios'
-import { Earth, Mail } from 'lucide-react'
+import { Earth } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { MessagesIcon } from './client/MessagesIcon'
 
 interface CategoriesResponse extends AxiosResponse{
     data: {
@@ -32,7 +32,6 @@ export const fetchCategories = async (limit: number):Promise<CategoryI[]> => {
 export const Sidebar = async () => {
 
     const categories = await fetchCategories(8);
-    const unseenMessages = await getUnseenMessages();
 
     return (
         <div className="bg-gray-50 dark:bg-[#1a1a1a] w-[20%] border-r border-gray-200 dark:border-gray-700 pt-10 px-6 h-[92vh] mt-[8vh] fixed lg:block hidden">
@@ -45,17 +44,7 @@ export const Sidebar = async () => {
                 </div>
 
                 <div className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
-                    <Link href="/inbox" className="flex flex-row gap-2 items-center font-semibold text-gray-800 dark:text-gray-200">
-                        <div className="relative">
-                            <Mail className="w-5 h-5" />
-                                {unseenMessages > 0 && (
-                                    <div className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                                        {unseenMessages}
-                                    </div>
-                                )}
-                        </div>
-                        <span>Inbox</span>
-                    </Link>
+                    <MessagesIcon />
                 </div>
             </div>
 

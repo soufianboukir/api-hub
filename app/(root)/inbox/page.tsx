@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { getConversations } from '@/services/conversations';
-import { _deleteMessage, _sendMessage, getMessages } from '@/services/messages';
+import { _deleteMessage, _sendMessage, getMessages, markMessagesAsRead } from '@/services/messages';
 import { toast } from 'sonner';
 import { Conversation, Message } from '@/interfaces/conv-mssg';
 import { Input } from '@/components/ui/input';
@@ -137,6 +137,7 @@ export default function ConversationsPage() {
     
 
     useEffect(() => {
+      markMessagesAsRead(selectedConversationRef?.current?._id)
       const fetchMessages = async () => {
         if (!selectedConversation) return;
         socket.emit("join_conversation", selectedConversation?._id);

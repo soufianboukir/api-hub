@@ -65,9 +65,6 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
               User Settings
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Keyboard shortcuts
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

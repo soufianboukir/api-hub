@@ -1,9 +1,8 @@
 import { auth } from "@/auth"
 import Message from "@/models/message.model";
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export const POST = async ( context: { params: Promise<{ conversationId: string }> }
-):Promise<NextResponse> =>{
+export const POST = async (request: NextRequest):Promise<NextResponse> =>{
     try{
         const session = await auth();
         if(!session){
@@ -14,7 +13,7 @@ export const POST = async ( context: { params: Promise<{ conversationId: string 
             })
         }
 
-        const { conversationId } = await context.params;
+        const { conversationId } = await request.json();
 
         await Message.updateMany(
             {
