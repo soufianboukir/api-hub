@@ -2,6 +2,8 @@
 
 **API-Hub** is a modern marketplace platform for sharing and discovering APIs. Built with **Next.js**, **MongoDB**, and **TypeScript**, it enables users to explore, review, and interact with APIs shared by other developers.
 
+![home](https://github.com/user-attachments/assets/96f856c6-6ddd-4cd9-acb8-f99fdb2fd245)
+
 
 ## 🧰 Tech Stack
 
@@ -10,7 +12,6 @@
 - **Database:** MongoDB (via Mongoose)
 - **Authentication:** NextAuth (Email/Password + Google OAuth)
 - **Styling:** Tailwind CSS
-- **Deployment:** Vercel / Render / MongoDB Atlas
 
 ---
 
@@ -52,5 +53,35 @@
 
 ---
 
-## 📁 Project Structure
+## Installation
+1. Clone the repository and install dependecies
+  ```
+    git clone https://github.com/sofyanBoukir/api-hub.git
+    cd api-hub
+    npm install
+  ```
+
+2. create and configure .env in root direcroty
+   ```
+      GOOGLE_CLIENT_ID=your.google-client.id
+      GOOGLE_CLIENT_SECRET=your.google-client.secret
+      MONGO_URL=mongodb://localhost:27017/api-hub
+      NEXTAUTH_SECRET=nextauthsecret
+      NEXTAUTH_URL=http://localhost:3000
+      NEXTAUTH_DEBUG=true
+      NODE_ENV='developement'
+      NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+      SERVER_URL=http://localhost:3005
+   ```
+
+3. Run the app
+  ```bash
+    npm run dev
+  ```
+
+### open your browser and type localhost:5173
+
+## Developer
+
+This app was developed with ❤️ by **sofyan**.  
 
