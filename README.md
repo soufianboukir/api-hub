@@ -1,11 +1,11 @@
-# 🚀 API-Hub
+# API-Hub
 
 **API-Hub** is a modern marketplace platform for sharing and discovering APIs. Built with **Next.js**, **MongoDB**, and **TypeScript**, it enables users to explore, review, and interact with APIs shared by other developers.
 
 ![home](https://github.com/user-attachments/assets/96f856c6-6ddd-4cd9-acb8-f99fdb2fd245)
 
 
-## 🧰 Tech Stack
+## Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript
@@ -15,9 +15,9 @@
 
 ---
 
-## 🔐 Features
+## Features
 
-### 👤 User Authentication
+### User Authentication
 
 - Register with email and password
 - Login with:
@@ -25,7 +25,7 @@
   - Google OAuth
 - Secure session handling via NextAuth
 
-### 📦 API Marketplace
+### API Marketplace
 
 - Browse and explore published APIs
 - Publish your own API to the marketplace
@@ -33,12 +33,12 @@
 - Mark APIs as **favorites** for later access
 - Leave **comments/reviews** on other users’ APIs
 
-### 💬 Messaging
+### Messaging
 
 - Send direct messages to API owners
 - Access conversation history in an inbox view
 
-### 🔔 Notifications
+### Notifications
 
 - Receive notifications for:
   - New messages
@@ -81,7 +81,4 @@
 
 ### open your browser and type localhost:5173
 
-## Developer
-
-This app was developed with ❤️ by **sofyan**.  
-
+built with ❤️ by **soufian**.
