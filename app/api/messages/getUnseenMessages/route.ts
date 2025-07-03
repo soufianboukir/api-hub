@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import Message from "@/models/message.model";
 import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest): Promise<NextResponse> => {
+export const GET = async (): Promise<NextResponse> => {
     try {
         const session = await auth();
         if (!session) {

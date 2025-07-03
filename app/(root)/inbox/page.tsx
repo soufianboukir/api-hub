@@ -8,7 +8,7 @@ import { Conversation, Message } from '@/interfaces/conv-mssg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Search, Send, ExternalLink, Delete, Trash2 } from 'lucide-react';
+import { Search, Send, ExternalLink, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';

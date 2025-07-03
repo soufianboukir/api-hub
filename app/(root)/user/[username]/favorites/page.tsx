@@ -50,7 +50,7 @@ const FavoriteApis = ({params}:{params:{username: string}}) => {
 
     useEffect(() => {
         fetchUserFavoriteApis(page);
-    }, []);
+    }, [page]);
 
     if(status === 'loading') return <Loading />
 

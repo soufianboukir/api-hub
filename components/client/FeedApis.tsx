@@ -38,7 +38,7 @@ export const FeedApis = () => {
 
     useEffect(() => {
         fetchApis(page);
-    }, []);
+    }, [page]);
 
     if (loading) return <p>Loading APIs...</p>;
     return (
