@@ -55,7 +55,6 @@ export default function ConversationsPage() {
         // });
 
         if(res.status === 200){
-          toast.success('Sended successfully')
           setMessages([...messages, newMsg])
         }
         setConversations((prev) => {
