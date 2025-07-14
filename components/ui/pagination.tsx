@@ -128,17 +128,13 @@ export function PaginationControls({previous,next} : PaginationControlsProps) {
     <Pagination>
       <PaginationContent className="flex justify-between w-[100%]">
         <PaginationItem>
-          <Button onClick={previous} className="bg-white text-black hover:bg-gray-100 duration-100 cursor-pointer">
-            <PaginationPrevious>
-                Previus
-            </PaginationPrevious>
+          <Button onClick={previous} className="bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white duration-100 cursor-pointer hover:bg-blue-700">
+            Previus
           </Button>
         </PaginationItem>
         <PaginationItem>
-          <Button onClick={next} className="bg-white text-black hover:bg-gray-100 duration-100 cursor-pointer">
-            <PaginationNext>
-                Next
-            </PaginationNext>
+          <Button onClick={next} className="bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-700 duration-100 cursor-pointer text-white">
+            Next
           </Button>
         </PaginationItem>
       </PaginationContent>

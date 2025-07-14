@@ -44,7 +44,7 @@ export const ApiCard = ({api,isOwner,isOnFavoritePage,favorite_id} : ApiCardProp
 
                 <div className='flex gap-2'>
                     {isOwner && (
-                        <Link href={`/user/${api.author.username}/editApi/${api._id}`}>
+                        <Link href={`/user/${api?.author?.username}/editApi/${api._id}`}>
                             <Bolt className='w-5 h-5 cursor-pointer text-gray-700 dark:text-gray-300' />
                         </Link>
                     )}
@@ -83,7 +83,7 @@ export const ApiCard = ({api,isOwner,isOnFavoritePage,favorite_id} : ApiCardProp
             <br />
             <div className='flex justify-between text-gray-500 dark:text-gray-400'>
                 <span>
-                    By <Link href={`/user/${api.author.username}`} className="hover:underline">{api.author.username}</Link>
+                    By <Link href={`/user/${api?.author?.username}`} className="hover:underline">{api?.author?.username}</Link>
                 </span>
                 <span>Updated {formatDate(api.updatedAt)}</span>
             </div>

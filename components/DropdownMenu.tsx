@@ -68,7 +68,7 @@ export function DropdownMenuDemo({session}:{session:Session | null}) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-            <Link href="https://github.com/sofyanBoukir/api-hub" target="_blank"> 
+            <Link href="https://github.com/soufianboukir/api-hub" target="_blank"> 
               Github
             </Link> 
         </DropdownMenuItem>

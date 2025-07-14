@@ -61,7 +61,7 @@ export const SearchInput = () => {
                 </div>
                 <input
                     type="text"
-                    className="w-full border border-gray-300 rounded-lg pl-10 pr-10 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                    className="w-full border border-gray-300 rounded-lg pl-10 pr-10 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm dark:text-white"
                     placeholder="Search for APIs..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

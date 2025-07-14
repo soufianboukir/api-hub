@@ -31,6 +31,7 @@ export const MessagesIcon = () => {
                     )}
             </div>
             <span>Inbox</span>
+            <span className='text-sm text-blue-600'>Not available yet</span>
         </Link>
     )
 }

@@ -58,7 +58,7 @@ export const Sidebar = async () => {
                     categories.map((category) => (
                     <div key={category._id as string} className="hover:bg-sky-100 dark:hover:bg-sky-900 py-2 px-3 rounded-md cursor-pointer duration-200">
                         <Link href={`/search/category/${category.name}`} className="flex flex-row gap-2 items-center text-gray-800 dark:text-gray-200">
-                        <span>{category.name}</span>
+                            <span>{category.name}</span>
                         </Link>
                     </div>
                     ))

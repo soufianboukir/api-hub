@@ -94,25 +94,25 @@ export function EditProfile({profileInfo, setProfileInfo}:
                     <Label htmlFor="bio" className="text-right">
                         Bio
                     </Label>
-                    <Textarea id="bio" value={form.bio ?? "Your bio here" } onChange={handleChange} className="col-span-3" />
+                    <Textarea placeholder="Long description about you" id="bio" value={form.bio ?? "Your bio here" } onChange={handleChange} className="col-span-3" />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="password" className="text-right">
                         Password
                     </Label>
-                    <Input id="password" type="password" value={form.password} onChange={handleChange} className="col-span-3" />
+                    <Input id="password" type="password" placeholder="*********" value={form.password} onChange={handleChange} className="col-span-3" />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="newPassword" className="text-right">
                         New Password
                     </Label>
-                    <Input id="newPassword" type="password" value={form.newPassword} onChange={handleChange} className="col-span-3" />
+                    <Input id="newPassword" type="password" placeholder="*********" value={form.newPassword} onChange={handleChange} className="col-span-3" />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="retypePassword" className="text-right">
                         Retype Password
                     </Label>
-                    <Input id="retypePassword" type="password" value={form.retypePassword} onChange={handleChange} className="col-span-3" />
+                    <Input id="retypePassword" placeholder="*********" type="password" value={form.retypePassword} onChange={handleChange} className="col-span-3" />
                 </div>
             </div>
             <DialogFooter>
