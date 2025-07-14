@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { Zap, Shield, Code, BarChart2, Globe, ArrowRight, Check } from 'lucide-react';
+import { Zap, Shield, Code, BarChart2, Globe, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
