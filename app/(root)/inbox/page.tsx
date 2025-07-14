@@ -48,11 +48,16 @@ export default function ConversationsPage() {
       };
 
       try {
-        await _sendMessage(selectedConversation._id, newMessage);
-        socket.emit("send_message", {
-          conversationId: selectedConversation?._id,
-          message: newMsg,
-        });
+        const res = await _sendMessage(selectedConversation._id, newMessage);
+        // socket.emit("send_message", {
+        //   conversationId: selectedConversation?._id,
+        //   message: newMsg,
+        // });
+
+        if(res.status === 200){
+          toast.success('Sended successfully')
+          setMessages([...messages, newMsg])
+        }
         setConversations((prev) => {
           const updatedConversation = {
             ...selectedConversation,
@@ -260,6 +265,9 @@ export default function ConversationsPage() {
                 loadConvs ?
                   <h1 className='text-xl mt-2 ml-2'>Loading your conversations...</h1>
                 :null
+              }
+              {
+                !loadConvs && !conversations && <h1 className='text-xl mt-2 ml-2'>No conversations available! Try to contact users</h1>
               }
             </div>
           </div>
