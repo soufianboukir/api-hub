@@ -45,7 +45,7 @@
   - New reviews
   - Updates on saved APIs
 
-### 🛠️ Profile Management
+### Profile Management
 
 - View and edit personal profile
 - Upload profile photo
