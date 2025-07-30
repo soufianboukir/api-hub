@@ -56,7 +56,7 @@
 ## Installation
 1. Clone the repository and install dependecies
   ```
-    git clone https://github.com/sofyanBoukir/api-hub.git
+    git clone https://github.com/soufianboukir/api-hub.git
     cd api-hub
     npm install
   ```
